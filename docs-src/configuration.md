@@ -13,17 +13,23 @@ The `security` block is **validated at startup and fails closed** — the server
 ```json
 {
   "providers": {
-    "bedrock": { "api": "bedrock", "region": "us-gov-west-1", "baseUrl": "https://bedrock-runtime.us-gov-west-1.amazonaws.com" },
+    "bedrock": { "api": "openai", "baseUrl": "https://bedrock-runtime.us-gov-west-1.amazonaws.com/openai/v1", "auth": { "type": "env", "key": "AWS_BEARER_TOKEN_BEDROCK" } },
+    "azure":   { "api": "azure", "baseUrl": "https://<resource>.openai.azure.us", "apiVersion": "2024-10-21", "azureAuth": "api-key", "auth": { "type": "env", "key": "AZURE_OPENAI_API_KEY" } },
     "local":   { "api": "openai", "baseUrl": "https://llm.internal.example.url/v1" }
   },
   "tiers": {
-    "SIMPLE":    { "primary": "local/llama-3.3-70b-instruct" },
-    "MEDIUM":    { "primary": "bedrock/anthropic.claude-3-5-sonnet-20241022-v2:0" },
-    "COMPLEX":   { "primary": "bedrock/anthropic.claude-opus-4-20250514-v1:0" }
+    "SIMPLE":    { "primary": "bedrock/openai.gpt-oss-20b-1:0",  "fallback": ["local/llama-3.3-70b-instruct"] },
+    "MEDIUM":    { "primary": "bedrock/openai.gpt-oss-120b-1:0", "fallback": ["azure/gpt-4o"] },
+    "COMPLEX":   { "primary": "bedrock/openai.gpt-oss-120b-1:0", "fallback": ["azure/gpt-4o"] }
   },
   "security": { "...": "see below" }
 }
 ```
+
+Frontier **OpenAI models** are served two compliant ways, both speaking the OpenAI chat format so switching a tier between them is a one-line change:
+
+- **Amazon Bedrock (GovCloud)** — Bedrock's OpenAI-compatible endpoint (`{bedrock-runtime}/openai/v1`) authenticated with a Bedrock API key. Use `api: "openai"` and set the base URL to `.../openai/v1`.
+- **Azure AI Foundry** (Azure OpenAI) — `api: "azure"` with your resource `baseUrl` (`…openai.azure.us` for Azure Government), an `apiVersion`, and `azureAuth` of `"api-key"` (key in an env var) or `"entra"` (a `{ tenantId, clientId, clientSecretEnv, authority, scope }` service principal). The model id is your **deployment name**.
 
 ```{list-table}
 :header-rows: 1
@@ -31,7 +37,7 @@ The `security` block is **validated at startup and fails closed** — the server
 * - Block
   - Purpose
 * - `providers`
-  - Backends and how to reach them (`anthropic`, `openai`, or `bedrock` with a `region`).
+  - Backends and how to reach them. `api` is `openai` (any OpenAI-compatible endpoint, including Bedrock's `/openai/v1`), `azure` (Azure AI Foundry — with `apiVersion` + `azureAuth`), `anthropic`, or `bedrock` (native SigV4).
 * - `tiers`
   - Which model serves each tier (`SIMPLE` → `REASONING`), with optional `fallback`.
 * - `models`

@@ -6,7 +6,7 @@ SecRouter runs as a single container (or a systemd service) inside your boundary
 
 - A container runtime (Docker / Podman), or a Linux host for the systemd unit.
 - An enterprise **OIDC IdP** (Keycloak, Okta, Entra, Ping) for SSO + MFA.
-- An authorized model endpoint: **Claude on AWS Bedrock GovCloud** (FedRAMP High / IL4–5) and/or self-hosted OpenAI-compatible models inside your boundary.
+- An authorized model endpoint: **frontier OpenAI models on AWS Bedrock GovCloud** and/or **Azure AI Foundry in Azure Government** (both FedRAMP High / IL4–5), and/or self-hosted OpenAI-compatible models inside your boundary.
 - For CUI: a **FIPS-validated TLS front end** (or a FIPS-linked runtime build).
 
 ## Run the container
@@ -41,9 +41,18 @@ See [Configuration](configuration.md) for the full reference, and [Control Valid
 
 Terminate TLS at a **FIPS-validated front end** (recommended): SecRouter binds localhost behind the proxy — set `tls.mode: "frontend"` and `requireFips: true`. Or terminate **natively** (`tls.mode: "native"` with a cert/key on a FIPS-linked runtime). The cipher policy follows NIST SP 800-52r2.
 
+## Model providers (Bedrock ↔ Azure)
+
+Frontier OpenAI models are served through two FedRAMP-High / IL4–5 clouds, both speaking the OpenAI chat format — so **switching a tier between them is a one-line config change** (flip the `primary`/`fallback` and keep both egress rules):
+
+- **AWS Bedrock GovCloud** — use `api: "openai"` with `baseUrl: "https://bedrock-runtime.<region>.amazonaws.com/openai/v1"` and a **Bedrock API key** in `AWS_BEARER_TOKEN_BEDROCK`. Models like `bedrock/openai.gpt-oss-120b-1:0`.
+- **Azure AI Foundry (Azure Government)** — use `api: "azure"` with `baseUrl: "https://<resource>.openai.azure.us"`, an `apiVersion`, and `azureAuth: "api-key"` (env-var key) or `"entra"` (a service-principal token, auto-fetched and cached). The model id is your **deployment name**, e.g. `azure/gpt-4o`.
+
+Every provider still passes the deny-by-default egress + classification gate — add each host to `egress.allowlist`.
+
 ## GovCloud &amp; air-gap
 
-- **GovCloud** — point egress at `bedrock-runtime.<region>.amazonaws.com` and supply AWS credentials via environment variables (never in the config or logs).
+- **GovCloud** — point egress at your Bedrock (`bedrock-runtime.<region>.amazonaws.com`) and/or Azure Government (`<resource>.openai.azure.us`) hosts; supply keys/secrets via environment variables (never in the config or logs).
 - **Air-gapped** — route only to in-boundary self-hosted models; no outbound calls are required.
 
 ## systemd (non-container)

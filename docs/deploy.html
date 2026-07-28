@@ -254,7 +254,7 @@
 <ul class="simple">
 <li><p>A container runtime (Docker / Podman), or a Linux host for the systemd unit.</p></li>
 <li><p>An enterprise <strong>OIDC IdP</strong> (Keycloak, Okta, Entra, Ping) for SSO + MFA.</p></li>
-<li><p>An authorized model endpoint: <strong>Claude on AWS Bedrock GovCloud</strong> (FedRAMP High / IL4–5) and/or self-hosted OpenAI-compatible models inside your boundary.</p></li>
+<li><p>An authorized model endpoint: <strong>frontier OpenAI models on AWS Bedrock GovCloud</strong> and/or <strong>Azure AI Foundry in Azure Government</strong> (both FedRAMP High / IL4–5), and/or self-hosted OpenAI-compatible models inside your boundary.</p></li>
 <li><p>For CUI: a <strong>FIPS-validated TLS front end</strong> (or a FIPS-linked runtime build).</p></li>
 </ul>
 </section>
@@ -290,10 +290,19 @@
 <h2>TLS &amp; FIPS<a class="headerlink" href="#tls-fips" title="Link to this heading">¶</a></h2>
 <p>Terminate TLS at a <strong>FIPS-validated front end</strong> (recommended): SecRouter binds localhost behind the proxy — set <code class="docutils literal notranslate"><span class="pre">tls.mode:</span> <span class="pre">&quot;frontend&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">requireFips:</span> <span class="pre">true</span></code>. Or terminate <strong>natively</strong> (<code class="docutils literal notranslate"><span class="pre">tls.mode:</span> <span class="pre">&quot;native&quot;</span></code> with a cert/key on a FIPS-linked runtime). The cipher policy follows NIST SP 800-52r2.</p>
 </section>
+<section id="model-providers-bedrock-azure">
+<h2>Model providers (Bedrock ↔ Azure)<a class="headerlink" href="#model-providers-bedrock-azure" title="Link to this heading">¶</a></h2>
+<p>Frontier OpenAI models are served through two FedRAMP-High / IL4–5 clouds, both speaking the OpenAI chat format — so <strong>switching a tier between them is a one-line config change</strong> (flip the <code class="docutils literal notranslate"><span class="pre">primary</span></code>/<code class="docutils literal notranslate"><span class="pre">fallback</span></code> and keep both egress rules):</p>
+<ul class="simple">
+<li><p><strong>AWS Bedrock GovCloud</strong> — use <code class="docutils literal notranslate"><span class="pre">api:</span> <span class="pre">&quot;openai&quot;</span></code> with <code class="docutils literal notranslate"><span class="pre">baseUrl:</span> <span class="pre">&quot;https://bedrock-runtime.&lt;region&gt;.amazonaws.com/openai/v1&quot;</span></code> and a <strong>Bedrock API key</strong> in <code class="docutils literal notranslate"><span class="pre">AWS_BEARER_TOKEN_BEDROCK</span></code>. Models like <code class="docutils literal notranslate"><span class="pre">bedrock/openai.gpt-oss-120b-1:0</span></code>.</p></li>
+<li><p><strong>Azure AI Foundry (Azure Government)</strong> — use <code class="docutils literal notranslate"><span class="pre">api:</span> <span class="pre">&quot;azure&quot;</span></code> with <code class="docutils literal notranslate"><span class="pre">baseUrl:</span> <span class="pre">&quot;https://&lt;resource&gt;.openai.azure.us&quot;</span></code>, an <code class="docutils literal notranslate"><span class="pre">apiVersion</span></code>, and <code class="docutils literal notranslate"><span class="pre">azureAuth:</span> <span class="pre">&quot;api-key&quot;</span></code> (env-var key) or <code class="docutils literal notranslate"><span class="pre">&quot;entra&quot;</span></code> (a service-principal token, auto-fetched and cached). The model id is your <strong>deployment name</strong>, e.g. <code class="docutils literal notranslate"><span class="pre">azure/gpt-4o</span></code>.</p></li>
+</ul>
+<p>Every provider still passes the deny-by-default egress + classification gate — add each host to <code class="docutils literal notranslate"><span class="pre">egress.allowlist</span></code>.</p>
+</section>
 <section id="govcloud-air-gap">
 <h2>GovCloud &amp; air-gap<a class="headerlink" href="#govcloud-air-gap" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p><strong>GovCloud</strong> — point egress at <code class="docutils literal notranslate"><span class="pre">bedrock-runtime.&lt;region&gt;.amazonaws.com</span></code> and supply AWS credentials via environment variables (never in the config or logs).</p></li>
+<li><p><strong>GovCloud</strong> — point egress at your Bedrock (<code class="docutils literal notranslate"><span class="pre">bedrock-runtime.&lt;region&gt;.amazonaws.com</span></code>) and/or Azure Government (<code class="docutils literal notranslate"><span class="pre">&lt;resource&gt;.openai.azure.us</span></code>) hosts; supply keys/secrets via environment variables (never in the config or logs).</p></li>
 <li><p><strong>Air-gapped</strong> — route only to in-boundary self-hosted models; no outbound calls are required.</p></li>
 </ul>
 </section>
@@ -373,6 +382,7 @@
 <li><a class="reference internal" href="#run-the-container">Run the container</a></li>
 <li><a class="reference internal" href="#production-configuration">Production configuration</a></li>
 <li><a class="reference internal" href="#tls-fips">TLS &amp; FIPS</a></li>
+<li><a class="reference internal" href="#model-providers-bedrock-azure">Model providers (Bedrock ↔ Azure)</a></li>
 <li><a class="reference internal" href="#govcloud-air-gap">GovCloud &amp; air-gap</a></li>
 <li><a class="reference internal" href="#systemd-non-container">systemd (non-container)</a></li>
 <li><a class="reference internal" href="#fail-closed-startup">Fail-closed startup</a></li>
