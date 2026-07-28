@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#232a16" />
 
-  <title>SecRouter — Secure AI API Gateway | Govern AI Use &amp; Contain AI Spend</title>
-  <meta name="description" content="SecRouter is the secure API gateway between your teams and every AI model — governing chat, embeddings, and agentic MCP tool calls with SSO authentication, per-user policy and spend caps, deny-by-default egress, provider failover, Prometheus metrics, and a hash-chained audit log. The control plane for AI, built for defense and regulated industry. One endpoint. Total control." />
-  <meta name="keywords" content="secure AI gateway, AI control plane, AI access control, LLM cost control, AI governance, AI spend management, egress control, data residency, model allowlist, OIDC SSO, self-hosted AI router, GovCloud AI, CMMC AI, enterprise AI security, AI audit log, MCP gateway, MCP tool governance, governed embeddings, AI observability, Prometheus metrics, provider failover, tool-calling security" />
+  <title>SecRouter — Open-Source Secure AI Gateway | Govern AI Use &amp; Contain AI Spend</title>
+  <meta name="description" content="SecRouter is an open-source (Apache 2.0), self-hosted secure API gateway between your teams and every AI model — governing chat, embeddings, and agentic MCP tool calls with SSO, per-user policy and spend caps, deny-by-default egress, provider failover, and a hash-chained audit log. Built for defense and regulated industry. Deploy it yourself, or get deployment, hardening, and CMMC/CUI support. Also from SecRouter: SecRecorder, a self-hosted Whisper transcription server." />
+  <meta name="keywords" content="open source AI gateway, Apache 2.0, secure AI gateway, AI control plane, self-hosted AI router, AI access control, LLM cost control, AI governance, egress control, data residency, model allowlist, OIDC SSO, GovCloud AI, CMMC AI, CMMC deployment support, CUI consulting, enterprise AI security, AI audit log, MCP gateway, governed embeddings, provider failover, self-hosted transcription, Whisper server, speaker diarization, SecRecorder" />
   <link rel="canonical" href="https://secrouter.io/" />
   <meta name="robots" content="index, follow" />
 
@@ -15,7 +15,7 @@
   <meta property="og:site_name" content="SecRouter" />
   <meta property="og:url" content="https://secrouter.io/" />
   <meta property="og:title" content="SecRouter — Govern AI Use. Contain AI Spend." />
-  <meta property="og:description" content="The secure API gateway between your teams and every model — governing chat, embeddings, and MCP tool calls with SSO, per-user policy, deny-by-default egress, and hard spend caps. Built for defense and regulated industry." />
+  <meta property="og:description" content="Open-source (Apache 2.0), self-hosted secure API gateway for every model — SSO, per-user policy, deny-by-default egress, and hard spend caps. Built for defense and regulated industry. Deploy it yourself, or get deployment support." />
   <meta property="og:image" content="https://secrouter.io/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -39,10 +39,13 @@
     "name": "SecRouter",
     "applicationCategory": "SecurityApplication",
     "applicationSubCategory": "AI Gateway / Control Plane",
-    "operatingSystem": "Linux, Docker, Self-hosted, GovCloud",
-    "description": "The secure control plane for enterprise AI. A drop-in API gateway that authenticates every request, enforces model, tool, and budget policy across chat, embeddings, and agentic MCP tool calls, controls egress by data classification, fails over dead providers, exposes Prometheus metrics, and logs every decision — built for defense and regulated industry.",
+    "operatingSystem": "Linux, macOS, Docker, Self-hosted, GovCloud",
+    "description": "Open-source (Apache 2.0), self-hosted secure AI gateway for defense and regulated industry. A drop-in API gateway that authenticates every request, enforces model, tool, and budget policy across chat, embeddings, and agentic MCP tool calls, controls egress by data classification, fails over dead providers, and logs every decision. Deploy it yourself or get deployment and CMMC/CUI support.",
+    "license": "https://www.apache.org/licenses/LICENSE-2.0",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "url": "https://secrouter.io/",
-    "keywords": "secure AI gateway, AI control plane, AI access control, LLM cost control, AI governance"
+    "keywords": "open source AI gateway, Apache 2.0, secure AI gateway, self-hosted AI router, CMMC deployment support"
   }
   </script>
 </head>
@@ -63,10 +66,11 @@
       <div class="nav-links">
         <a href="#platform">Platform</a>
         <a href="#security">Security</a>
-        <a href="#spend">Spend</a>
+        <a href="#recorder">Recorder</a>
         <a href="docs/index.html">Docs</a>
+        <a href="https://github.com/secrouter/secrouter">GitHub</a>
       </div>
-      <a class="btn btn-solid nav-access" href="#cta">Request access</a>
+      <a class="btn btn-solid nav-access" href="#services">Deployment support</a>
       <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </nav>
   </header>
@@ -83,14 +87,14 @@
       </div>
       <div class="container hero-grid">
         <div class="hero-copy reveal">
-          <p class="pill"><span class="dot"></span> Built for defense &amp; regulated industry</p>
+          <p class="pill"><span class="dot"></span> Open source · Apache 2.0 · Built for defense &amp; regulated industry</p>
           <h1>Govern AI use.<br />Contain AI spend.</h1>
-          <p class="lede">SecRouter is the secure API gateway between your teams and every model — authenticating every request, enforcing policy, controlling egress, and capping spend across the organization. One endpoint. Total control.</p>
+          <p class="lede">SecRouter is the secure API gateway between your teams and every model — authenticating every request, enforcing policy, controlling egress, and capping spend across the organization. Open source and self-hosted: deploy it yourself, or bring us in for deployment support.</p>
           <div class="hero-actions">
-            <a class="btn btn-hero" href="#cta">Request a briefing</a>
-            <a class="btn btn-outline-dark" href="#platform">View architecture</a>
+            <a class="btn btn-hero" href="https://github.com/secrouter/secrouter">Get it on GitHub</a>
+            <a class="btn btn-outline-dark" href="#services">Deployment support</a>
           </div>
-          <p class="trust-mini">Self-hosted<span>Deny-by-default egress</span><span>Air-gap ready</span></p>
+          <p class="trust-mini">Apache 2.0<span>Self-hosted</span><span>Deny-by-default egress</span><span>Air-gap ready</span></p>
         </div>
 
         <!-- inspected-request card -->
@@ -104,7 +108,7 @@
             <div class="req-prompt">"Summarize the Q3 contract analysis and flag delivery risks…"</div>
             <div class="req-checks">
               <div><span class="ck">✓</span> Authenticated — OIDC + MFA</div>
-              <div><span class="ck">✓</span> Model allowlist — claude-gov ok</div>
+              <div><span class="ck">✓</span> Model allowlist — gpt-oss-120b ok</div>
               <div><span class="ck">✓</span> Budget — $1,240 / $5,000 team</div>
             </div>
             <div class="req-foot">
@@ -119,7 +123,7 @@
     <!-- TRUST STRIP -->
     <section class="trust">
       <div class="container trust-row">
-        <span>NIST SP 800-171 R2</span><i>/</i><span>CMMC L3 control mapping</span><i>/</i><span>FIPS-aware</span><i>/</i>
+        <span>Open source · Apache 2.0</span><i>/</i><span>NIST SP 800-171 R2</span><i>/</i><span>CMMC L3 control mapping</span><i>/</i><span>FIPS-aware</span><i>/</i>
         <span>OIDC SSO + MFA</span><i>/</i><span>Deny-by-default egress</span><i>/</i><span>Self-hosted or GovCloud</span>
       </div>
     </section>
@@ -252,18 +256,34 @@
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="band cta" id="cta">
+    <!-- RECORDER -->
+    <section class="band" id="recorder">
+      <div class="container">
+        <p class="eyebrow olive">Also from SecRouter — open source</p>
+        <h2 class="mono">SecRecorder — transcription that never leaves your boundary</h2>
+        <p class="sub">A self-hosted, OpenAI-compatible speech-to-text server (Whisper) with optional speaker diarization — for meeting notes and recordings. Runs on your own Apple Silicon or NVIDIA hardware, so audio and transcripts stay inside the accreditation boundary. Air-gap capable.</p>
+        <div class="feat-grid reveal">
+          <div class="feat"><h4>Self-hosted Whisper</h4><p>MLX (Apple) or faster-whisper (CUDA/CPU)</p></div>
+          <div class="feat"><h4>Speaker diarization</h4><p>Per-word labels + voiceprints (opt-in)</p></div>
+          <div class="feat"><h4>OpenAI-compatible</h4><p>Drop-in <code>/v1/audio/transcriptions</code></p></div>
+          <div class="feat"><h4>Air-gap ready</h4><p>Weights load once — no outbound calls</p></div>
+        </div>
+        <p class="reveal" style="margin-top:22px"><a class="btn btn-solid" href="https://github.com/secrouter/secrecorder">SecRecorder on GitHub</a></p>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="band cta" id="services">
       <div class="container center reveal">
         <svg class="cta-mark" width="40" height="46" viewBox="0 0 48 56" fill="none" aria-hidden="true">
           <polygon points="24,2 44,13 44,37 24,54 4,37 4,13" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
           <path d="M24 28 L24 14 M24 28 L14 38 M24 28 L34 38" stroke="currentColor" stroke-width="1.9"/>
           <circle cx="24" cy="28" r="4.6" fill="var(--olive)"/>
         </svg>
-        <h2 class="mono cta-h">Put a control plane<br />in front of AI.</h2>
-        <p class="cta-p">Map SecRouter to your environment and compliance posture — or clone it and bring up the secured test stack in one command.</p>
+        <h2 class="mono cta-h">Deploy it yourself —<br />or bring us in.</h2>
+        <p class="cta-p">SecRouter and SecRecorder are open source (Apache 2.0) — clone them and run the secured stack in your boundary. When you need it done fast and accreditation-ready, we provide deployment, hardening, and CMMC/CUI support.</p>
         <div class="cta-actions">
-          <a class="btn btn-solid btn-lg" href="mailto:sales@secrouter.io?subject=SecRouter%20briefing">Request a briefing</a>
+          <a class="btn btn-solid btn-lg" href="mailto:sales@secrouter.io?subject=SecRouter%20deployment%20support">Talk deployment support</a>
           <a class="btn btn-outline btn-lg" href="docs/index.html">Read the docs</a>
         </div>
       </div>
@@ -281,16 +301,16 @@
           </svg>
           <span class="wordmark light"><span class="sec-l">SEC</span>ROUTER</span>
         </a>
-        <p>The secure control plane for enterprise AI. Built for defense and regulated industry.</p>
+        <p>Open-source, self-hosted AI tooling for defense and regulated industry. Apache 2.0.</p>
       </div>
       <nav class="footer-cols" aria-label="Footer">
-        <div><h5>Platform</h5><a href="#platform">Overview</a><a href="#security">Security</a><a href="#spend">Cost control</a></div>
-        <div><h5>Resources</h5><a href="docs/index.html">Docs</a><a href="https://git.secrouter.io/spaceProbe/secrouter">GitHub</a><a href="security.html">Security brief</a><a href="mailto:sales@secrouter.io">Contact</a></div>
+        <div><h5>Products</h5><a href="#platform">SecRouter gateway</a><a href="#recorder">SecRecorder</a><a href="#services">Deployment support</a></div>
+        <div><h5>Resources</h5><a href="docs/index.html">Docs</a><a href="https://github.com/secrouter/secrouter">SecRouter on GitHub</a><a href="https://github.com/secrouter/secrecorder">SecRecorder on GitHub</a><a href="security.html">Security brief</a><a href="mailto:sales@secrouter.io?subject=SecRouter%20deployment%20support">Deployment support</a></div>
       </nav>
     </div>
     <div class="container footer-base">
       <span>© <span id="year">2026</span> SecRouter</span>
-      <span>NIST 800-171 R2 control mapping · Self-hosted</span>
+      <span>Open source · Apache 2.0 · NIST 800-171 R2 control mapping</span>
     </div>
   </footer>
 
