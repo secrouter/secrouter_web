@@ -64,4 +64,26 @@
     }, { threshold: 0.5 });
     io2.observe(fig);
   }
+
+  // Hero rotator: cycle the "Secure AI ___" endings, then land on the last one ("now.").
+  // The element's default text is already the final word, so no-JS and reduced-motion
+  // visitors — and screen readers (the line is aria-labelled) — just see "Secure AI now."
+  var rot = document.querySelector(".hero-kicker .rot");
+  if (rot && !reduce) {
+    var words = (rot.getAttribute("data-words") || "").split("|").filter(Boolean);
+    if (words.length > 1) {
+      var i = 0, DWELL = 1300, FADE = 300;
+      rot.textContent = words[0];
+      var advance = function () {
+        rot.classList.add("rot-out");
+        setTimeout(function () {
+          rot.textContent = words[++i];
+          rot.classList.remove("rot-out");
+          if (i < words.length - 1) setTimeout(advance, DWELL);
+          else rot.classList.add("rot-final");
+        }, FADE);
+      };
+      setTimeout(advance, DWELL);
+    }
+  }
 })();
