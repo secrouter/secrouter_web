@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#232a16" />
 
-  <title>SecRouter — Open-Source Secure AI Gateway | Govern AI Use &amp; Contain AI Spend</title>
-  <meta name="description" content="SecRouter is an open-source (Apache 2.0), self-hosted secure API gateway between your teams and every AI model — governing chat, embeddings, and agentic MCP tool calls with SSO, per-user policy and spend caps, deny-by-default egress, provider failover, and a hash-chained audit log. Built for defense and regulated industry. Deploy it yourself, or get deployment, hardening, and CMMC/CUI support. Also from SecRouter: SecRecorder, a self-hosted Whisper transcription server." />
-  <meta name="keywords" content="open source AI gateway, Apache 2.0, secure AI gateway, AI control plane, self-hosted AI router, AI access control, LLM cost control, AI governance, egress control, data residency, model allowlist, OIDC SSO, GovCloud AI, CMMC AI, CMMC deployment support, CUI consulting, enterprise AI security, AI audit log, MCP gateway, governed embeddings, provider failover, self-hosted transcription, Whisper server, speaker diarization, SecRecorder" />
+  <title>SecRouter — Open-Source Secure AI Gateway &amp; Suite | Govern AI Use, Contain AI Spend</title>
+  <meta name="description" content="SecRouter is an open-source (Apache 2.0), self-hosted secure API gateway between your teams and every AI model — governing chat, embeddings, and agentic MCP tool calls with SSO, per-user policy and spend caps, deny-by-default egress, provider failover, and a hash-chained audit log. It anchors the SecRouter suite: self-hostable SSO, local inference, chat-ops agents, transcription, internal DNS/CA/proxy, and one-command deploy. Built for defense and regulated industry — air-gap and GovCloud ready. Deploy it yourself, or get deployment, hardening, and CMMC/CUI support." />
+  <meta name="keywords" content="open source AI gateway, Apache 2.0, secure AI gateway, AI control plane, self-hosted AI router, SecRouter suite, self-hosted SSO, Authentik OIDC, self-hosted vLLM, local inference control plane, AI chat-ops, Mattermost AI bot, code review agent, self-hosted transcription, Whisper server, speaker diarization, internal ACME certificate authority, air-gapped AI, AI access control, LLM cost control, AI governance, egress control, model allowlist, OIDC SSO, GovCloud AI, CMMC AI, CMMC deployment support, CUI consulting, AI audit log, MCP gateway, one-command AI deployment" />
   <link rel="canonical" href="https://secrouter.io/" />
   <meta name="robots" content="index, follow" />
 
@@ -15,14 +15,14 @@
   <meta property="og:site_name" content="SecRouter" />
   <meta property="og:url" content="https://secrouter.io/" />
   <meta property="og:title" content="SecRouter — Govern AI Use. Contain AI Spend." />
-  <meta property="og:description" content="Open-source (Apache 2.0), self-hosted secure API gateway for every model — SSO, per-user policy, deny-by-default egress, and hard spend caps. Built for defense and regulated industry. Deploy it yourself, or get deployment support." />
+  <meta property="og:description" content="Open-source (Apache 2.0), self-hosted secure AI gateway for every model — SSO, per-user policy, deny-by-default egress, and hard spend caps. Anchors the SecRouter suite: self-hostable SSO, local inference, chat-ops agents, transcription, and one-command deploy. Built for defense and regulated industry." />
   <meta property="og:image" content="https://secrouter.io/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="SecRouter — Govern AI Use. Contain AI Spend." />
-  <meta name="twitter:description" content="The secure control plane for enterprise AI: SSO, policy enforcement, deny-by-default egress, and hard spend caps in front of every model." />
+  <meta name="twitter:description" content="The secure control plane for enterprise AI — SSO, policy enforcement, deny-by-default egress, and hard spend caps in front of every model. The flagship of the self-hostable SecRouter suite." />
   <meta name="twitter:image" content="https://secrouter.io/og-image.png" />
 
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
@@ -40,12 +40,13 @@
     "applicationCategory": "SecurityApplication",
     "applicationSubCategory": "AI Gateway / Control Plane",
     "operatingSystem": "Linux, macOS, Docker, Self-hosted, GovCloud",
-    "description": "Open-source (Apache 2.0), self-hosted secure AI gateway for defense and regulated industry. A drop-in API gateway that authenticates every request, enforces model, tool, and budget policy across chat, embeddings, and agentic MCP tool calls, controls egress by data classification, fails over dead providers, and logs every decision. Deploy it yourself or get deployment and CMMC/CUI support.",
+    "description": "Open-source (Apache 2.0), self-hosted secure AI gateway for defense and regulated industry. A drop-in API gateway that authenticates every request, enforces model, tool, and budget policy across chat, embeddings, and agentic MCP tool calls, controls egress by data classification, fails over dead providers, and logs every decision. Anchors the SecRouter suite: self-hostable SSO (SecSSO), local inference (SecLLM), chat-ops agents (SecAgent, SecChat), transcription (SecRecorder), internal DNS/CA/proxy, and one-command deploy (SecDeploy). Deploy it yourself or get deployment and CMMC/CUI support.",
     "license": "https://www.apache.org/licenses/LICENSE-2.0",
     "isAccessibleForFree": true,
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "url": "https://secrouter.io/",
-    "keywords": "open source AI gateway, Apache 2.0, secure AI gateway, self-hosted AI router, CMMC deployment support"
+    "isPartOf": { "@type": "SoftwareApplication", "name": "SecRouter suite", "applicationCategory": "SecurityApplication" },
+    "keywords": "open source AI gateway, Apache 2.0, secure AI gateway, self-hosted AI router, SecRouter suite, self-hosted SSO, self-hosted vLLM, AI chat-ops, self-hosted transcription, CMMC deployment support"
   }
   </script>
 </head>
@@ -65,10 +66,10 @@
       </a>
       <div class="nav-links">
         <a href="#platform">Platform</a>
+        <a href="#suite">Suite</a>
         <a href="#security">Security</a>
-        <a href="#recorder">Recorder</a>
         <a href="docs/index.html">Docs</a>
-        <a href="https://github.com/secrouter/secrouter">GitHub</a>
+        <a href="https://github.com/secrouter">GitHub</a>
       </div>
       <a class="btn btn-solid nav-access" href="#services">Deployment support</a>
       <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -189,6 +190,71 @@
       </div>
     </section>
 
+    <!-- THE SUITE -->
+    <section class="band suite-band" id="suite">
+      <div class="container">
+        <p class="eyebrow olive">Open source · Apache 2.0 · Self-hosted</p>
+        <h2 class="mono">One gateway is the start. The suite is the whole boundary.</h2>
+        <p class="sub">SecRouter governs the AI traffic — but standing that up in a closed or regulated network takes identity, inference, collaboration, and the plumbing to tie them together. Each piece is self-hostable and air-gap ready. Run the ones you need; drop the ones you already have.</p>
+        <div class="suite-grid reveal">
+
+          <div class="tier-label"><span>Identity &amp; trust</span><i>optional · drop when you have your own</i></div>
+          <a class="comp" href="https://github.com/secrouter/secsso">
+            <div class="comp-top"><span class="comp-name"><span class="sec">SEC</span>SSO</span><span class="comp-arrow" aria-hidden="true">↗</span></div>
+            <p class="comp-role">Single sign-on (Authentik) — pre-wired OIDC blueprints and suite branding. Drop it the moment you have Okta, Entra, or Keycloak.</p>
+          </a>
+          <a class="comp" href="https://github.com/secrouter/seccert">
+            <div class="comp-top"><span class="comp-name"><span class="sec">SEC</span>CERT</span><span class="comp-arrow" aria-hidden="true">↗</span></div>
+            <p class="comp-role">Internal ACME (RFC 8555) certificate authority — issues the suite's TLS certs on closed or air-gapped networks.</p>
+          </a>
+          <a class="comp" href="https://github.com/secrouter/secdns">
+            <div class="comp-top"><span class="comp-name"><span class="sec">SEC</span>DNS</span><span class="comp-arrow" aria-hidden="true">↗</span></div>
+            <p class="comp-role">Zero-dependency authoritative DNS — resolves the suite's internal <code>*.internal</code> names when you run no DNS of your own.</p>
+          </a>
+
+          <div class="tier-label"><span>Inference</span></div>
+          <a class="comp" href="https://github.com/secrouter/secllm">
+            <div class="comp-top"><span class="comp-name"><span class="sec">SEC</span>LLM</span><span class="comp-arrow" aria-hidden="true">↗</span></div>
+            <p class="comp-role">A friendly control plane for vLLM — curated model catalog, load/unload, health management, and an OpenAI-compatible endpoint. SecRouter routes to it.</p>
+          </a>
+
+          <div class="tier-label"><span>Gateway</span></div>
+          <a class="comp flag" href="https://github.com/secrouter/secrouter">
+            <div class="comp-top"><span class="comp-name"><span class="sec">SEC</span>ROUTER</span><span class="comp-arrow" aria-hidden="true">↗</span></div>
+            <p class="comp-role">The governed AI gateway at the center — authenticate every request, enforce model/tool/budget policy, gate egress, fail over providers, and log every decision.</p>
+          </a>
+
+          <div class="tier-label"><span>Agents &amp; collaboration</span></div>
+          <a class="comp" href="https://github.com/secrouter/secagent">
+            <div class="comp-top"><span class="comp-name"><span class="sec">SEC</span>AGENT</span><span class="comp-arrow" aria-hidden="true">↗</span></div>
+            <p class="comp-role">Agentic harness (pi) — merge-request review, static analysis, docs and test generation over an affordance engine. Every call governed through the gateway.</p>
+          </a>
+          <a class="comp" href="https://github.com/secrouter/secchat">
+            <div class="comp-top"><span class="comp-name"><span class="sec">SEC</span>CHAT</span><span class="comp-arrow" aria-hidden="true">↗</span></div>
+            <p class="comp-role">Team chat and chat-ops (Mattermost) — SSO via SecSSO, bridged to SecAgent so the whole team can drive the agent from a channel.</p>
+          </a>
+          <a class="comp" href="https://github.com/secrouter/secrecorder">
+            <div class="comp-top"><span class="comp-name"><span class="sec">SEC</span>RECORDER</span><span class="comp-arrow" aria-hidden="true">↗</span></div>
+            <p class="comp-role">Self-hosted Whisper transcription with optional speaker diarization — meeting audio and transcripts never leave the boundary.</p>
+          </a>
+
+          <div class="tier-label"><span>Edge</span><i>optional infra</i></div>
+          <a class="comp" href="https://github.com/secrouter/secproxy">
+            <div class="comp-top"><span class="comp-name"><span class="sec">SEC</span>PROXY</span><span class="comp-arrow" aria-hidden="true">↗</span></div>
+            <p class="comp-role">Edge reverse proxy — one HTTPS front door (:443) for the suite's web and API services, FIPS-clean on hardened hosts.</p>
+          </a>
+
+          <div class="tier-label"><span>Orchestration</span></div>
+          <a class="comp" href="https://github.com/secrouter/secdeploy">
+            <div class="comp-top"><span class="comp-name"><span class="sec">SEC</span>DEPLOY</span><span class="comp-arrow" aria-hidden="true">↗</span></div>
+            <p class="comp-role">Release train and deploy orchestration — one pinned, tested suite version per target, from a macOS eval box to a FIPS-ready Fedora host.</p>
+          </a>
+
+        </div>
+        <p class="suite-foot">Every component ships as one pinned, tested set through <a href="https://github.com/secrouter/secdeploy">SecDeploy</a> — and SecAgent and its <code>pi</code> CLI ship with <strong>LeanCTX</strong> context compression wired in, hardened and on by default.</p>
+      </div>
+    </section>
+
     <!-- SECURITY BAND -->
     <section class="band dark" id="security">
       <div class="container sec-grid">
@@ -259,7 +325,7 @@
     <!-- RECORDER -->
     <section class="band" id="recorder">
       <div class="container">
-        <p class="eyebrow olive">Also from SecRouter — open source</p>
+        <p class="eyebrow olive">Suite spotlight · open source</p>
         <h2 class="mono">SecRecorder — transcription that never leaves your boundary</h2>
         <p class="sub">A self-hosted, OpenAI-compatible speech-to-text server (Whisper) with optional speaker diarization — for meeting notes and recordings. Runs on your own Apple Silicon or NVIDIA hardware, so audio and transcripts stay inside the accreditation boundary. Air-gap capable.</p>
         <div class="feat-grid reveal">
@@ -304,8 +370,8 @@
         <p>Open-source, self-hosted AI tooling for defense and regulated industry. Apache 2.0.</p>
       </div>
       <nav class="footer-cols" aria-label="Footer">
-        <div><h5>Products</h5><a href="#platform">SecRouter gateway</a><a href="#recorder">SecRecorder</a><a href="#services">Deployment support</a></div>
-        <div><h5>Resources</h5><a href="docs/index.html">Docs</a><a href="https://github.com/secrouter/secrouter">SecRouter on GitHub</a><a href="https://github.com/secrouter/secrecorder">SecRecorder on GitHub</a><a href="security.html">Security brief</a><a href="mailto:sales@secrouter.io?subject=SecRouter%20deployment%20support">Deployment support</a></div>
+        <div><h5>Suite</h5><a href="#suite">The suite</a><a href="#platform">SecRouter gateway</a><a href="https://github.com/secrouter/secagent">SecAgent</a><a href="https://github.com/secrouter/secllm">SecLLM</a><a href="#recorder">SecRecorder</a></div>
+        <div><h5>Resources</h5><a href="docs/index.html">Docs</a><a href="https://github.com/secrouter">All repos on GitHub</a><a href="security.html">Security brief</a><a href="mailto:sales@secrouter.io?subject=SecRouter%20deployment%20support">Deployment support</a></div>
       </nav>
     </div>
     <div class="container footer-base">

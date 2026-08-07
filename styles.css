@@ -157,6 +157,32 @@ h1,h2,h3,h4,h5 { margin:0 0 .5em; }
 .feat h4 { font:600 14px/1.2 var(--mono); margin:0 0 8px; }
 .feat p { font-size:13px; color:var(--muted); line-height:1.5; margin:0; }
 
+/* the suite */
+.suite-band { background:var(--bg-alt); border-top:1px solid var(--border-2); border-bottom:1px solid var(--border-2); }
+.suite-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:8px; }
+.tier-label { grid-column:1 / -1; display:flex; align-items:center; gap:14px; margin:26px 0 2px; }
+.tier-label:first-child { margin-top:0; }
+.tier-label span { font:600 12px/1 var(--mono); letter-spacing:.14em; text-transform:uppercase; color:var(--olive); white-space:nowrap; }
+.tier-label i { font:10.5px/1 var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--muted3); font-style:normal; white-space:nowrap; }
+.tier-label::after { content:""; flex:1; height:1px; background:var(--border-2); }
+.comp { display:flex; flex-direction:column; gap:9px; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:20px; transition:.16s ease; }
+.comp:hover { border-color:var(--olive); transform:translateY(-2px); }
+.comp-top { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.comp-name { font:600 15px/1 var(--mono); letter-spacing:.02em; color:var(--ink); }
+.comp-name .sec { color:var(--olive); }
+.comp-arrow { color:var(--muted3); font:600 15px/1 var(--mono); flex:none; }
+.comp:hover .comp-arrow { color:var(--olive); }
+.comp-role { font-size:13px; color:var(--muted); line-height:1.55; margin:0; }
+.comp.flag { background:var(--olive-dark); border-color:var(--olive-dark); }
+.comp.flag .comp-name { color:var(--on-dark); }
+.comp.flag .comp-name .sec { color:var(--olive-light); }
+.comp.flag .comp-role { color:var(--on-dark-mut2); }
+.comp.flag .comp-arrow { color:var(--olive-light); }
+.suite-foot { margin:26px 0 0; font-size:14px; color:var(--muted2); line-height:1.6; max-width:760px; }
+.suite-foot a { color:var(--olive); border-bottom:1px solid var(--border-2); }
+.suite-foot a:hover { border-bottom-color:var(--olive); }
+.suite-foot strong { color:var(--ink); font-weight:650; }
+
 /* cta */
 .cta-mark { color:var(--ink); margin-bottom:24px; }
 .cta-h { font:600 clamp(28px,4vw,38px)/1.1 var(--mono); letter-spacing:-.01em; margin:0 0 18px; }
