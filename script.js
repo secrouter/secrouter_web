@@ -68,7 +68,7 @@
   // Hero rotator: cycle the "Secure AI ___" endings, then land on the last one ("now.").
   // The element's default text is already the final word, so no-JS and reduced-motion
   // visitors — and screen readers (the line is aria-labelled) — just see "Secure AI now."
-  var rot = document.querySelector(".hero-kicker .rot");
+  var rot = document.querySelector(".hero-rot .rot");
   if (rot && !reduce) {
     var words = (rot.getAttribute("data-words") || "").split("|").filter(Boolean);
     if (words.length > 1) {
