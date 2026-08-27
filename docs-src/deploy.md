@@ -1,4 +1,38 @@
-# Deploy
+# SecRouter (gateway)
+
+**SecRouter** is a self-hosted, OpenAI-compatible AI gateway that sits in front of your LLMs and
+enforces governance and cost control on every request — chat, embeddings, and agentic **MCP
+tool calls** alike: SSO authentication, per-user policy and budgets, deny-by-default egress with
+a data-classification gate, and a hash-chained, metadata-only audit log.
+
+It's a drop-in endpoint — point any OpenAI-compatible client at SecRouter, change the base URL,
+and keep your code.
+
+```{admonition} What it does
+:class: tip
+**Govern** — OIDC SSO + MFA, per-user/group allowlists for models *and* MCP tools, deny-by-default egress. Chat, embeddings, and tool calls all pass the same gates.
+**Contain spend** — per-user token & cost tracking, budgets, rate limits, smart routing (including A/B and escalation experiments).
+**Stay up** — a per-provider circuit breaker fails fast to the next authorized model; Prometheus `/metrics` + W3C trace propagation feed your SOC.
+**Prove it** — tamper-evident audit and one-click evidence export, mapped to NIST 800-171 R2 / CMMC L3 controls.
+```
+
+This section covers SecRouter itself: [Deploy](deploy.md) (this page), [Usage](usage.md),
+[Configuration](configuration.md), and [Control Validation](control-validation.md). For the rest
+of the suite, see the [docs hub](index.md).
+
+## The request pipeline
+
+Every call flows through four gates, with usage metered and everything logged:
+
+```text
+client ──▶ AuthN ──▶ AuthZ ──▶ route ──▶ egress gate ──▶ authorized model
+          (OIDC)    (policy +   (cheapest   (deny-by-default
+                     quota)     capable)     + data residency)
+```
+
+If any gate says no, the request never leaves your boundary.
+
+## Deploy
 
 SecRouter runs as a single container (or a systemd service) inside your boundary. It is stateless except for a small SQLite store — the audit log and usage ledger — kept on a writable volume.
 
@@ -16,8 +50,8 @@ The SecRouter image (built from the provided `Dockerfile`, or pulled from your r
 ```bash
 docker run -d --name secrouter --restart unless-stopped \
   -p 18800:18800 \
-  -e FREEROUTER_CONFIG=/var/lib/secrouter/config.json \
-  -e CLAWROUTER_HOST=0.0.0.0 \
+  -e SECROUTER_CONFIG=/var/lib/secrouter/config.json \
+  -e SECROUTER_HOST=0.0.0.0 \
   -v /srv/secrouter:/var/lib/secrouter \
   secrouter:latest
 ```

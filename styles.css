@@ -1,4 +1,35 @@
 /* SecRouter site — per designer handoff. Warm sand + dark olive bands; IBM Plex. */
+
+/* Self-hosted IBM Plex (assets/fonts/) — no external font requests. */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/ibm-plex-mono-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/ibm-plex-mono-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/fonts/ibm-plex-mono-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('assets/fonts/ibm-plex-sans-variable.woff2') format('woff2');
+}
+
 :root {
   --ink:#17140d; --muted:#5b5b4d; --muted2:#6f7359; --muted3:#8a8a78;
   --olive:#54672f; --olive-deep:#445226; --olive-dark:#232a16; --olive-panel:#2e3720;

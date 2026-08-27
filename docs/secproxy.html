@@ -1,15 +1,15 @@
 <!doctype html>
 <html class="no-js" lang="en" data-content_root="./">
-  <head>
-<meta charset="utf-8">
+  <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="#">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="SecDeploy — release train &amp; deployer" href="secdeploy.html"><link rel="prev" title="SecRecorder — self-hosted transcription" href="secrecorder.html">
         <link rel="prefetch" href="_static/logo-mark.svg" as="image">
         <link rel="prefetch" href="_static/logo-mark-dark.svg" as="image">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
-<meta name="robots" content="noindex" />
-<title>Search - SecRouter Docs</title><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+        <title>SecProxy — edge reverse proxy - SecRouter Docs</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=bc976ec1" />
@@ -181,7 +181,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -201,7 +201,7 @@
     <span class="sidebar-brand-text">SecRouter Docs</span>
   </a>
   
-</div><form class="sidebar-search-container" method="get" action="#" role="search">
+</div><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
@@ -231,8 +231,8 @@
 <li class="toctree-l1"><a class="reference internal" href="secrecorder.html">SecRecorder — self-hosted transcription</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Edge</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="secproxy.html">SecProxy — edge reverse proxy</a></li>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">SecProxy — edge reverse proxy</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Orchestration</span></p>
 <ul>
@@ -256,7 +256,9 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -264,30 +266,79 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          
-<noscript>
-<div class="admonition error">
-  <p class="admonition-title">Error</p>
-  <p>
-    Please activate JavaScript to enable the search functionality.
-  </p>
+          <section id="secproxy-edge-reverse-proxy">
+<h1>SecProxy — edge reverse proxy<a class="headerlink" href="#secproxy-edge-reverse-proxy" title="Link to this heading">¶</a></h1>
+<p><strong>secproxy</strong> is <a class="reference external" href="https://nginx.org">nginx</a> wired into the suite as the <code class="docutils literal notranslate"><span class="pre">edge</span></code> tier — one HTTPS
+front door. Instead of remembering a different port for every service, you reach
+<code class="docutils literal notranslate"><span class="pre">https://&lt;service&gt;.&lt;domain&gt;</span></code> on a single port, <strong>443</strong>, and secproxy routes by Host header to
+the right backend.</p>
+<section id="what-it-does">
+<h2>What it does<a class="headerlink" href="#what-it-does" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>One HTTPS port</strong> for every fronted suite service (SecSSO, SecRouter, SecAgent, SecChat,
+SecRecorder) — SecCert, SecLLM, and secdns are deliberately reached directly instead.</p></li>
+<li><p><strong>FIPS-clean</strong> — nginx links the host’s <strong>system OpenSSL</strong>, so edge TLS termination runs
+through the FIPS-validated module on hardened hosts; the same nginx runs unchanged on the
+macOS eval target.</p></li>
+<li><p><strong>Generated, not hand-written</strong> — the entire config comes from SecDeploy’s
+<code class="docutils literal notranslate"><span class="pre">wiring.nginx_conf_text()</span></code> reading your <code class="docutils literal notranslate"><span class="pre">topology.toml</span></code>, in a stable, diffable order.</p></li>
+<li><p><strong>One SAN certificate</strong> covering every fronted hostname, issued by SecCert at deploy time and
+installed for every <code class="docutils literal notranslate"><span class="pre">:443</span></code> server block; a <code class="docutils literal notranslate"><span class="pre">:80</span></code> webroot keeps ACME renewal working without
+stopping nginx.</p></li>
+<li><p><strong>No code of its own</strong> — packaging and generated config over upstream nginx; runs as a
+hardened, non-root systemd unit on Fedora-FIPS, or natively on macOS.</p></li>
+</ul>
+</section>
+<section id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nginx<span class="w"> </span>-t<span class="w"> </span>-c<span class="w"> </span>/etc/secsuite/nginx-secproxy.conf<span class="w">                 </span><span class="c1"># validate</span>
+nginx<span class="w"> </span>-c<span class="w"> </span>/etc/secsuite/nginx-secproxy.conf<span class="w"> </span>-g<span class="w"> </span><span class="s1">'daemon off;'</span><span class="w">   </span><span class="c1"># run</span>
+</pre></div>
 </div>
-</noscript>
-
-<div id="search-results"></div>
+<p>In the suite, SecDeploy generates the config and installs the unit for you — see SecDeploy’s
+<code class="docutils literal notranslate"><span class="pre">docs/fedora-fips.md</span></code> / <code class="docutils literal notranslate"><span class="pre">docs/macos.md</span></code>.</p>
+</section>
+<section id="learn-more">
+<h2>Learn more<a class="headerlink" href="#learn-more" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong><a class="reference external" href="https://github.com/secrouter/secproxy">secproxy on GitHub</a></strong> — source, issues, releases.</p></li>
+<li><p>Documentation lives inline in the repo — see
+<a class="reference external" href="https://github.com/secrouter/secproxy/blob/main/nginx-secproxy.conf.example"><code class="docutils literal notranslate"><span class="pre">nginx-secproxy.conf.example</span></code></a>
+for the exact config shape, and SecDeploy’s docs for how site placement drives it.</p></li>
+</ul>
+</section>
+</section>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="secdeploy.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">SecDeploy — release train &amp; deployer</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="secrecorder.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">SecRecorder — self-hosted transcription</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -308,8 +359,29 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">SecProxy — edge reverse proxy</a><ul>
+<li><a class="reference internal" href="#what-it-does">What it does</a></li>
+<li><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li><a class="reference internal" href="#learn-more">Learn more</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -318,8 +390,5 @@
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
-    
-<script src="_static/searchtools.js"></script>
-<script src="_static/language_data.js"></script>
-<script src="searchindex.js"></script></body>
+    </body>
 </html>

@@ -1,15 +1,15 @@
 <!doctype html>
 <html class="no-js" lang="en" data-content_root="./">
-  <head>
-<meta charset="utf-8">
+  <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="#">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="SecProxy — edge reverse proxy" href="secproxy.html"><link rel="prev" title="SecChat — auditable team + agentic chat" href="secchat.html">
         <link rel="prefetch" href="_static/logo-mark.svg" as="image">
         <link rel="prefetch" href="_static/logo-mark-dark.svg" as="image">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
-<meta name="robots" content="noindex" />
-<title>Search - SecRouter Docs</title><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+        <title>SecRecorder — self-hosted transcription - SecRouter Docs</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=bc976ec1" />
@@ -181,7 +181,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -201,7 +201,7 @@
     <span class="sidebar-brand-text">SecRouter Docs</span>
   </a>
   
-</div><form class="sidebar-search-container" method="get" action="#" role="search">
+</div><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
@@ -225,10 +225,10 @@
 <li class="toctree-l1"><a class="reference internal" href="secllm.html">SecLLM — a control plane for vLLM</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Agents &amp; collaboration</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="secagent.html">SecAgent — the agentic harness</a></li>
 <li class="toctree-l1"><a class="reference internal" href="secchat.html">SecChat — auditable team + agentic chat</a></li>
-<li class="toctree-l1"><a class="reference internal" href="secrecorder.html">SecRecorder — self-hosted transcription</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">SecRecorder — self-hosted transcription</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Edge</span></p>
 <ul>
@@ -256,7 +256,9 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -264,30 +266,79 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          
-<noscript>
-<div class="admonition error">
-  <p class="admonition-title">Error</p>
-  <p>
-    Please activate JavaScript to enable the search functionality.
-  </p>
+          <section id="secrecorder-self-hosted-transcription">
+<h1>SecRecorder — self-hosted transcription<a class="headerlink" href="#secrecorder-self-hosted-transcription" title="Link to this heading">¶</a></h1>
+<p><strong>SecRecorder</strong> <em>(aka SpeakerBox)</em> is a self-hosted, OpenAI-compatible Whisper speech-to-text
+server with optional speaker diarization. One codebase auto-selects its backend: <strong>Apple
+Silicon</strong> → MLX (Metal GPU); <strong>Linux / NVIDIA</strong> → faster-whisper (CUDA), or CPU anywhere.</p>
+<section id="what-it-does">
+<h2>What it does<a class="headerlink" href="#what-it-does" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Built-in web UI</strong> at <code class="docutils literal notranslate"><span class="pre">/</span></code> — record from the mic or drop an audio file, transcribe with
+optional speaker labels and recognition, enroll speakers into the library, and copy/export
+the notes.</p></li>
+<li><p><strong>OpenAI-compatible</strong> <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/v1/audio/transcriptions</span></code> (word-level timestamps always
+returned), plus <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/v1/models</span></code> and <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/health</span></code>.</p></li>
+<li><p><strong>Speaker diarization + recognition</strong> (both opt-in) — per-word speaker labels, then
+recognize enrolled speakers by name across recordings via a local voiceprint library.</p></li>
+<li><p><strong>Dead-air guard</strong> — near-silent audio returns an empty transcript instead of a Whisper
+hallucination.</p></li>
+<li><p><strong>Optional SSO</strong> (off by default) and <strong>optional, governed summarization</strong> (off by default,
+routed through SecRouter when enabled).</p></li>
+<li><p><strong>Tamper-evident audit trail</strong>, on by default.</p></li>
+</ul>
+</section>
+<section id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>&lt;this-repo&gt;<span class="w"> </span>secrecorder<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>secrecorder
+./install.sh<span class="w">          </span><span class="c1"># sets up the venv</span>
+./run.sh<span class="w">               </span><span class="c1"># 127.0.0.1:9000, prewarmed</span>
+</pre></div>
 </div>
-</noscript>
-
-<div id="search-results"></div>
+<p>Open <code class="docutils literal notranslate"><span class="pre">http://localhost:9000/</span></code> for the web UI, or point any OpenAI client’s <code class="docutils literal notranslate"><span class="pre">base_url</span></code> at the API.</p>
+</section>
+<section id="learn-more">
+<h2>Learn more<a class="headerlink" href="#learn-more" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong><a class="reference external" href="https://github.com/secrouter/secrecorder">SecRecorder on GitHub</a></strong> — source, issues,
+releases.</p></li>
+<li><p><strong><a class="reference external" href="https://github.com/secrouter/secrecorder/tree/main/docs">SecRecorder docs</a></strong> — every
+environment variable, the full API/web-UI walkthrough, deployment, the security model, and
+the control mapping.</p></li>
+</ul>
+</section>
+</section>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="secproxy.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">SecProxy — edge reverse proxy</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="secchat.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">SecChat — auditable team + agentic chat</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -308,8 +359,29 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">SecRecorder — self-hosted transcription</a><ul>
+<li><a class="reference internal" href="#what-it-does">What it does</a></li>
+<li><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li><a class="reference internal" href="#learn-more">Learn more</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -318,8 +390,5 @@
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
-    
-<script src="_static/searchtools.js"></script>
-<script src="_static/language_data.js"></script>
-<script src="searchindex.js"></script></body>
+    </body>
 </html>

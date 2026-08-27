@@ -27,9 +27,6 @@
 
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 
   <script type="application/ld+json">
@@ -222,7 +219,7 @@
           <div class="tier-label"><span>Gateway</span></div>
           <a class="comp flag" href="https://github.com/secrouter/secrouter">
             <div class="comp-top"><span class="comp-name"><span class="sec">SEC</span>ROUTER</span><span class="comp-arrow" aria-hidden="true">↗</span></div>
-            <p class="comp-role">The governed AI gateway at the center — authenticate every request, enforce model/tool/budget policy, gate egress, fail over providers, and log every decision.</p>
+            <p class="comp-role">The governed AI gateway at the center — authenticate every request, enforce model/tool/budget policy, gate egress, smart-route (with opt-in A/B and escalation routing experiments), fail over providers, and log every decision.</p>
           </a>
 
           <div class="tier-label"><span>Agents &amp; collaboration</span></div>
@@ -232,7 +229,7 @@
           </a>
           <a class="comp" href="https://github.com/secrouter/secchat">
             <div class="comp-top"><span class="comp-name"><span class="sec">SEC</span>CHAT</span><span class="comp-arrow" aria-hidden="true">↗</span></div>
-            <p class="comp-role">Auditable team chat <em>and</em> agentic chat in one app — SSO via SecSSO, tamper-evident hash-chained audit, CUI marking and local DLP, and owner-gated coding agents driven right from a channel. Every model call governed through SecRouter, per person.</p>
+            <p class="comp-role">Auditable team chat <em>and</em> agentic chat in one app — SSO via SecSSO, tamper-evident hash-chained audit, owner-gated coding agents (with an optional Kubernetes agent pool), native voice &amp; video calling (live video, recorded-and-transcribed audio), and a light/dark theme. Every model call governed through SecRouter, per person.</p>
           </a>
           <a class="comp" href="https://github.com/secrouter/secrecorder">
             <div class="comp-top"><span class="comp-name"><span class="sec">SEC</span>RECORDER</span><span class="comp-arrow" aria-hidden="true">↗</span></div>
@@ -252,7 +249,7 @@
           </a>
 
         </div>
-        <p class="suite-foot">Every component ships as one pinned, tested set through <a href="https://github.com/secrouter/secdeploy">SecDeploy</a> — and SecAgent and its <code>pi</code> CLI ship with <strong>LeanCTX</strong> context compression wired in, hardened and on by default.</p>
+        <p class="suite-foot">Every component ships as one pinned, tested set through <a href="https://github.com/secrouter/secdeploy">SecDeploy</a>; each governed service carries its own tamper-evident audit trail and CMMC/NIST 800-171 control mapping, most with a one-click evidence bundle — and SecAgent's <code>pi</code> CLI ships with <strong>LeanCTX</strong> context compression wired in, hardened and on by default.</p>
       </div>
     </section>
 
@@ -283,7 +280,7 @@
           <p class="muted-p">Attribute spend down to the principal, set hard caps, and route to cheaper models automatically. Finance gets one bill; IT gets the controls.</p>
           <ol class="num-list">
             <li><span class="n">01</span> Per-group and per-user budgets with rate limits and hard auto-cutoff</li>
-            <li><span class="n">02</span> Smart routing trims spend by sending easy calls to small models</li>
+            <li><span class="n">02</span> Smart routing trims spend by sending easy calls to small models — with opt-in A/B split experiments and draft-then-escalate routing to test or promote a model safely</li>
             <li><span class="n">03</span> Per-user, per-model, per-day usage you can export for chargeback</li>
           </ol>
         </div>
@@ -314,6 +311,7 @@
           <div class="feat"><h4>Budget caps</h4><p>Hard caps &amp; auto-cutoff</p></div>
           <div class="feat"><h4>Per-user quotas</h4><p>Request &amp; token rate limits</p></div>
           <div class="feat"><h4>Smart routing</h4><p>Cheapest capable model</p></div>
+          <div class="feat"><h4>Routing experiments</h4><p>A/B splits + draft-and-escalate</p></div>
           <div class="feat"><h4>Egress control</h4><p>Deny-by-default allow-list</p></div>
           <div class="feat"><h4>Provider failover</h4><p>Circuit breaker on dead upstreams</p></div>
           <div class="feat"><h4>Prometheus metrics</h4><p>Ops &amp; SIEM observability</p></div>

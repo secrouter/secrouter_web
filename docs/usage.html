@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Configuration" href="configuration.html"><link rel="prev" title="Deploy" href="deploy.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Configuration" href="configuration.html"><link rel="prev" title="SecRouter (gateway)" href="deploy.html">
         <link rel="prefetch" href="_static/logo-mark.svg" as="image">
         <link rel="prefetch" href="_static/logo-mark-dark.svg" as="image">
 
@@ -12,7 +12,7 @@
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=11b728c8" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=bc976ec1" />
     
     
 
@@ -207,11 +207,36 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="deploy.html">Deploy</a></li>
+  <p class="caption" role="heading"><span class="caption-text">Identity &amp; trust</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="seccert.html">SecCert — internal ACME certificate authority</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secsso.html">SecSSO — single sign-on for the suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secdns.html">secdns — internal authoritative DNS</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SecRouter (gateway)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="deploy.html">SecRouter (gateway)</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="control-validation.html">Control Validation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Inference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secllm.html">SecLLM — a control plane for vLLM</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Agents &amp; collaboration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secagent.html">SecAgent — the agentic harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secchat.html">SecChat — auditable team + agentic chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secrecorder.html">SecRecorder — self-hosted transcription</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Edge</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secproxy.html">SecProxy — edge reverse proxy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Orchestration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secdeploy.html">SecDeploy — release train &amp; deployer</a></li>
 </ul>
 
 </div>
@@ -264,12 +289,12 @@
 <section id="make-a-request">
 <h2>Make a request<a class="headerlink" href="#make-a-request" title="Link to this heading">¶</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>https://secrouter.example.url/v1/chat/completions<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
-<span class="s1">        &quot;model&quot;: &quot;auto&quot;,</span>
-<span class="s1">        &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Summarize this contract clause…&quot;}]</span>
-<span class="s1">      }&#39;</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">        "model": "auto",</span>
+<span class="s1">        "messages": [{"role": "user", "content": "Summarize this contract clause…"}]</span>
+<span class="s1">      }'</span>
 </pre></div>
 </div>
 <p>Use <code class="docutils literal notranslate"><span class="pre">&quot;model&quot;:</span> <span class="pre">&quot;auto&quot;</span></code> to let the classifier choose, or name a specific model to pass through (subject to your allowlist).</p>
@@ -278,7 +303,7 @@
 <section id="smart-routing-overrides">
 <h2>Smart routing &amp; overrides<a class="headerlink" href="#smart-routing-overrides" title="Link to this heading">¶</a></h2>
 <p>With <code class="docutils literal notranslate"><span class="pre">auto</span></code>, a weighted classifier scores each request and routes to the cheapest capable tier. Override it inline when you know better — the prefix is stripped before the model sees it:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/simple   What&#39;s 2+2?
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>/simple   What's 2+2?
 /max      Analyze this distributed system for race conditions
 [complex] Refactor this module to use dependency injection
 deep mode: Why does this recursive CTE produce duplicates?
@@ -308,13 +333,70 @@ deep mode: Why does this recursive CTE produce duplicates?
 </table>
 </div>
 </section>
+<section id="routing-experiments">
+<h2>Routing experiments<a class="headerlink" href="#routing-experiments" title="Link to this heading">¶</a></h2>
+<p>Two independent, off-by-default features, configured under <code class="docutils literal notranslate"><span class="pre">experiments</span></code> in
+<code class="docutils literal notranslate"><span class="pre">secrouter.config.json</span></code>. Both are validated fail-loud at startup/reload — an invalid block
+refuses to (re)load rather than silently misrouting live traffic.</p>
+<section id="split-a-b-routing">
+<h3>Split (A/B) routing<a class="headerlink" href="#split-a-b-routing" title="Link to this heading">¶</a></h3>
+<p>Assign a tier’s traffic across two or more candidate models by weight, e.g. to benchmark a new
+model against the incumbent:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">"experiments"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"split"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sonnet-vs-candidate"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"tiers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"MEDIUM"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"variants"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span><span class="w"> </span><span class="nt">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"azure/gpt-4o"</span><span class="p">,</span><span class="w"> </span><span class="nt">"weight"</span><span class="p">:</span><span class="w"> </span><span class="mi">90</span><span class="w"> </span><span class="p">},</span>
+<span class="w">          </span><span class="p">{</span><span class="w"> </span><span class="nt">"model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bedrock/openai.gpt-oss-120b-1:0"</span><span class="p">,</span><span class="w"> </span><span class="nt">"weight"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Every non-<code class="docutils literal notranslate"><span class="pre">EXPLICIT</span></code> request that resolves to that tier is weighted-randomly assigned a
+variant. Read the assignment back from the <code class="docutils literal notranslate"><span class="pre">X-SecRouter-Split</span></code> response header, the Access
+Log’s <code class="docutils literal notranslate"><span class="pre">route.decision</span></code> events, or the <code class="docutils literal notranslate"><span class="pre">secrouter_split_assigned_total{tier,model}</span></code> Prometheus
+counter. A per-user policy denial/downgrade still overrides the assignment — split runs before
+both health-aware steering and policy authorization.</p>
+</section>
+<section id="escalation-routing">
+<h3>Escalation routing<a class="headerlink" href="#escalation-routing" title="Link to this heading">¶</a></h3>
+<p>Draft cheap, judge the draft, and escalate to a stronger tier only when needed:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">"experiments"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"escalation"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"fromTiers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"SIMPLE"</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"toTier"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MEDIUM"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"judge"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"mode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"heuristic"</span><span class="p">,</span><span class="w"> </span><span class="nt">"timeoutMs"</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w"> </span><span class="nt">"minDraftChars"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For a matching, non-streaming request, SecRouter drafts a response on <code class="docutils literal notranslate"><span class="pre">fromTiers</span></code>, then judges
+it (<code class="docutils literal notranslate"><span class="pre">heuristic</span></code> — empty/truncated/refusal-matched/too-short draft; or <code class="docutils literal notranslate"><span class="pre">model</span></code> — a rubric prompt
+that fails open to <em>accept</em> on timeout or unparseable output). An accepted draft is served as-is
+(<code class="docutils literal notranslate"><span class="pre">X-SecRouter-Escalation:</span> <span class="pre">accepted</span></code>); an escalated request is re-authorized and forwarded fresh
+to <code class="docutils literal notranslate"><span class="pre">toTier</span></code> (<code class="docutils literal notranslate"><span class="pre">X-SecRouter-Escalation:</span> <span class="pre">escalated</span></code>, <code class="docutils literal notranslate"><span class="pre">X-SecRouter-Tier</span></code> becomes <code class="docutils literal notranslate"><span class="pre">toTier</span></code>) — or, if
+<code class="docutils literal notranslate"><span class="pre">toTier</span></code> has no model or policy denies it, the draft is served instead
+(<code class="docutils literal notranslate"><span class="pre">escalation_denied</span></code>). Escalation never fires on <code class="docutils literal notranslate"><span class="pre">stream:</span> <span class="pre">true</span></code> or <code class="docutils literal notranslate"><span class="pre">EXPLICIT</span></code> (pinned-model)
+requests. Every draft, accept, escalate, and denial is an audited event, alongside the
+<code class="docutils literal notranslate"><span class="pre">secrouter_escalations_total{from_tier,to_tier,outcome}</span></code> metric.</p>
+<p>Split and escalation compose: split resolves which model a tier’s chain starts with, and
+escalation then drafts on that chain before deciding whether to escalate.</p>
+</section>
+</section>
 <section id="embeddings">
 <h2>Embeddings<a class="headerlink" href="#embeddings" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/v1/embeddings</span></code> is governed exactly like chat — same OIDC auth, per-user model policy, classification clearance, deny-by-default egress, quota, and per-user cost accounting — so RAG pipelines run <strong>through</strong> the control plane instead of around it.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>https://secrouter.example.url/v1/embeddings<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{ &quot;model&quot;: &quot;auto&quot;, &quot;input&quot;: &quot;text to embed&quot; }&#39;</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">'{ "model": "auto", "input": "text to embed" }'</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">&quot;model&quot;:</span> <span class="pre">&quot;auto&quot;</span></code> uses the configured <code class="docutils literal notranslate"><span class="pre">embeddings.default</span></code>; or name an embedding model directly (subject to your allow-list). Register embedding models from the console’s <em>add endpoint</em> wizard by ticking <strong>embedding</strong> on the discovered models.</p>
@@ -329,8 +411,8 @@ deep mode: Why does this recursive CTE produce duplicates?
 </ul>
 <p>Register servers under <code class="docutils literal notranslate"><span class="pre">security.mcp</span></code> (see <a class="reference internal" href="configuration.html"><span class="std std-doc">Configuration</span></a>); grant tools per group/user on the console’s <strong>Users</strong> tab (<strong>Allowed tools</strong>). The gateway is off unless <code class="docutils literal notranslate"><span class="pre">security.mcp.enabled</span></code>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>https://secrouter.example.url/mcp<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{ &quot;jsonrpc&quot;: &quot;2.0&quot;, &quot;id&quot;: 1, &quot;method&quot;: &quot;tools/list&quot; }&#39;</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">'{ "jsonrpc": "2.0", "id": 1, "method": "tools/list" }'</span>
 </pre></div>
 </div>
 </section>
@@ -392,13 +474,13 @@ deep mode: Why does this recursive CTE produce duplicates?
 <section id="see-your-usage">
 <h2>See your usage<a class="headerlink" href="#see-your-usage" title="Link to this heading">¶</a></h2>
 <p>Any user can check their own spend:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span>https://secrouter.example.url/v1/usage
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">"</span><span class="w"> </span>https://secrouter.example.url/v1/usage
 </pre></div>
 </div>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;principal&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;alice@example.url&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;usage&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;last24h&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;requestCount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;inputTokens&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">30400</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;costUsd&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.21</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
-<span class="w">  </span><span class="nt">&quot;budgets&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;window&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;day&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;maxCostUsd&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="w"> </span><span class="p">}]</span>
+<span class="w">  </span><span class="nt">"principal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"alice@example.url"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"usage"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"last24h"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"requestCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="nt">"inputTokens"</span><span class="p">:</span><span class="w"> </span><span class="mi">30400</span><span class="p">,</span><span class="w"> </span><span class="nt">"costUsd"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.21</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"budgets"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">"window"</span><span class="p">:</span><span class="w"> </span><span class="s2">"day"</span><span class="p">,</span><span class="w"> </span><span class="nt">"maxCostUsd"</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="w"> </span><span class="p">}]</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -430,12 +512,12 @@ deep mode: Why does this recursive CTE produce duplicates?
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">(</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://secrouter.example.url/v1&quot;</span><span class="p">,</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">"https://secrouter.example.url/v1"</span><span class="p">,</span>
     <span class="n">api_key</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>   <span class="c1"># your OIDC access token</span>
 <span class="p">)</span>
 <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
-    <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello&quot;</span><span class="p">}],</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"Hello"</span><span class="p">}],</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -463,7 +545,7 @@ deep mode: Why does this recursive CTE produce duplicates?
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Deploy</div>
+                <div class="title">SecRouter (gateway)</div>
                 
               </div>
             </a>
@@ -503,6 +585,11 @@ deep mode: Why does this recursive CTE produce duplicates?
 <li><a class="reference internal" href="#authenticate">Authenticate</a></li>
 <li><a class="reference internal" href="#make-a-request">Make a request</a></li>
 <li><a class="reference internal" href="#smart-routing-overrides">Smart routing &amp; overrides</a></li>
+<li><a class="reference internal" href="#routing-experiments">Routing experiments</a><ul>
+<li><a class="reference internal" href="#split-a-b-routing">Split (A/B) routing</a></li>
+<li><a class="reference internal" href="#escalation-routing">Escalation routing</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#embeddings">Embeddings</a></li>
 <li><a class="reference internal" href="#mcp-tool-gateway">MCP tool gateway</a></li>
 <li><a class="reference internal" href="#endpoints">Endpoints</a></li>

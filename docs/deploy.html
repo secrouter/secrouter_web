@@ -3,16 +3,16 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Usage" href="usage.html"><link rel="prev" title="SecRouter documentation" href="index.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Usage" href="usage.html"><link rel="prev" title="secdns — internal authoritative DNS" href="secdns.html">
         <link rel="prefetch" href="_static/logo-mark.svg" as="image">
         <link rel="prefetch" href="_static/logo-mark-dark.svg" as="image">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
-        <title>Deploy - SecRouter Docs</title>
+        <title>SecRouter (gateway) - SecRouter Docs</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=11b728c8" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=bc976ec1" />
     
     
 
@@ -207,11 +207,36 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Deploy</a></li>
+  <p class="caption" role="heading"><span class="caption-text">Identity &amp; trust</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="seccert.html">SecCert — internal ACME certificate authority</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secsso.html">SecSSO — single sign-on for the suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secdns.html">secdns — internal authoritative DNS</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SecRouter (gateway)</span></p>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">SecRouter (gateway)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="control-validation.html">Control Validation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Inference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secllm.html">SecLLM — a control plane for vLLM</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Agents &amp; collaboration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secagent.html">SecAgent — the agentic harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secchat.html">SecChat — auditable team + agentic chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secrecorder.html">SecRecorder — self-hosted transcription</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Edge</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secproxy.html">SecProxy — edge reverse proxy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Orchestration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secdeploy.html">SecDeploy — release train &amp; deployer</a></li>
 </ul>
 
 </div>
@@ -246,9 +271,38 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="deploy">
-<h1>Deploy<a class="headerlink" href="#deploy" title="Link to this heading">¶</a></h1>
+          <section id="secrouter-gateway">
+<h1>SecRouter (gateway)<a class="headerlink" href="#secrouter-gateway" title="Link to this heading">¶</a></h1>
+<p><strong>SecRouter</strong> is a self-hosted, OpenAI-compatible AI gateway that sits in front of your LLMs and
+enforces governance and cost control on every request — chat, embeddings, and agentic <strong>MCP
+tool calls</strong> alike: SSO authentication, per-user policy and budgets, deny-by-default egress with
+a data-classification gate, and a hash-chained, metadata-only audit log.</p>
+<p>It’s a drop-in endpoint — point any OpenAI-compatible client at SecRouter, change the base URL,
+and keep your code.</p>
+<div class="tip admonition">
+<p class="admonition-title">What it does</p>
+<p><strong>Govern</strong> — OIDC SSO + MFA, per-user/group allowlists for models <em>and</em> MCP tools, deny-by-default egress. Chat, embeddings, and tool calls all pass the same gates.
+<strong>Contain spend</strong> — per-user token &amp; cost tracking, budgets, rate limits, smart routing (including A/B and escalation experiments).
+<strong>Stay up</strong> — a per-provider circuit breaker fails fast to the next authorized model; Prometheus <code class="docutils literal notranslate"><span class="pre">/metrics</span></code> + W3C trace propagation feed your SOC.
+<strong>Prove it</strong> — tamper-evident audit and one-click evidence export, mapped to NIST 800-171 R2 / CMMC L3 controls.</p>
+</div>
+<p>This section covers SecRouter itself: <a class="reference internal" href="#"><span class="std std-doc">Deploy</span></a> (this page), <a class="reference internal" href="usage.html"><span class="std std-doc">Usage</span></a>,
+<a class="reference internal" href="configuration.html"><span class="std std-doc">Configuration</span></a>, and <a class="reference internal" href="control-validation.html"><span class="std std-doc">Control Validation</span></a>. For the rest
+of the suite, see the <a class="reference internal" href="index.html"><span class="std std-doc">docs hub</span></a>.</p>
+<section id="the-request-pipeline">
+<h2>The request pipeline<a class="headerlink" href="#the-request-pipeline" title="Link to this heading">¶</a></h2>
+<p>Every call flows through four gates, with usage metered and everything logged:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>client ──▶ AuthN ──▶ AuthZ ──▶ route ──▶ egress gate ──▶ authorized model
+          (OIDC)    (policy +   (cheapest   (deny-by-default
+                     quota)     capable)     + data residency)
+</pre></div>
+</div>
+<p>If any gate says no, the request never leaves your boundary.</p>
+</section>
+<section id="deploy">
+<h2>Deploy<a class="headerlink" href="#deploy" title="Link to this heading">¶</a></h2>
 <p>SecRouter runs as a single container (or a systemd service) inside your boundary. It is stateless except for a small SQLite store — the audit log and usage ledger — kept on a writable volume.</p>
+</section>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
 <ul class="simple">
@@ -263,8 +317,8 @@
 <p>The SecRouter image (built from the provided <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>, or pulled from your registry) is multi-stage, non-root, and ships a <code class="docutils literal notranslate"><span class="pre">/health</span></code> check.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>secrouter<span class="w"> </span>--restart<span class="w"> </span>unless-stopped<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-p<span class="w"> </span><span class="m">18800</span>:18800<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span><span class="nv">FREEROUTER_CONFIG</span><span class="o">=</span>/var/lib/secrouter/config.json<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>-e<span class="w"> </span><span class="nv">CLAWROUTER_HOST</span><span class="o">=</span><span class="m">0</span>.0.0.0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">SECROUTER_CONFIG</span><span class="o">=</span>/var/lib/secrouter/config.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">SECROUTER_HOST</span><span class="o">=</span><span class="m">0</span>.0.0.0<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-v<span class="w"> </span>/srv/secrouter:/var/lib/secrouter<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>secrouter:latest
 </pre></div>
@@ -334,14 +388,14 @@
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="index.html">
+          <a class="prev-page" href="secdns.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Home</div>
+                <div class="title">secdns — internal authoritative DNS</div>
                 
               </div>
             </a>
@@ -377,7 +431,9 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Deploy</a><ul>
+<li><a class="reference internal" href="#">SecRouter (gateway)</a><ul>
+<li><a class="reference internal" href="#the-request-pipeline">The request pipeline</a></li>
+<li><a class="reference internal" href="#deploy">Deploy</a></li>
 <li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li><a class="reference internal" href="#run-the-container">Run the container</a></li>
 <li><a class="reference internal" href="#production-configuration">Production configuration</a></li>

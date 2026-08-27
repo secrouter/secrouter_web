@@ -1,15 +1,15 @@
 <!doctype html>
 <html class="no-js" lang="en" data-content_root="./">
-  <head>
-<meta charset="utf-8">
+  <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="#">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="SecChat — auditable team + agentic chat" href="secchat.html"><link rel="prev" title="SecLLM — a control plane for vLLM" href="secllm.html">
         <link rel="prefetch" href="_static/logo-mark.svg" as="image">
         <link rel="prefetch" href="_static/logo-mark-dark.svg" as="image">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
-<meta name="robots" content="noindex" />
-<title>Search - SecRouter Docs</title><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+        <title>SecAgent — the agentic harness - SecRouter Docs</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=bc976ec1" />
@@ -181,7 +181,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -201,7 +201,7 @@
     <span class="sidebar-brand-text">SecRouter Docs</span>
   </a>
   
-</div><form class="sidebar-search-container" method="get" action="#" role="search">
+</div><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
@@ -225,8 +225,8 @@
 <li class="toctree-l1"><a class="reference internal" href="secllm.html">SecLLM — a control plane for vLLM</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Agents &amp; collaboration</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="secagent.html">SecAgent — the agentic harness</a></li>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">SecAgent — the agentic harness</a></li>
 <li class="toctree-l1"><a class="reference internal" href="secchat.html">SecChat — auditable team + agentic chat</a></li>
 <li class="toctree-l1"><a class="reference internal" href="secrecorder.html">SecRecorder — self-hosted transcription</a></li>
 </ul>
@@ -256,7 +256,9 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -264,30 +266,83 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          
-<noscript>
-<div class="admonition error">
-  <p class="admonition-title">Error</p>
-  <p>
-    Please activate JavaScript to enable the search functionality.
-  </p>
+          <section id="secagent-the-agentic-harness">
+<h1>SecAgent — the agentic harness<a class="headerlink" href="#secagent-the-agentic-harness" title="Link to this heading">¶</a></h1>
+<p><strong>SecAgent</strong> pairs the <a class="reference external" href="https://pi.dev">pi coding agent</a> (the agentic loop) with a
+context-frugal toolset built for <em>local</em> models — an affordance engine that pre-computes
+compact, content-addressed representations of a codebase so an agent works from a minimal,
+budget-bounded context instead of raw source. pi is the runtime; SecAgent is what pi drives.</p>
+<section id="what-it-does">
+<h2>What it does<a class="headerlink" href="#what-it-does" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Affordance engine</strong> — a project-structure map, per-file summaries, a service/component IO
+map (imports, endpoints, calls, datastores, queues), a symbol index, and an inter-file call
+map, cached and content-addressed.</p></li>
+<li><p><strong>Docs deep-dive</strong> (<code class="docutils literal notranslate"><span class="pre">secagent</span> <span class="pre">docs</span></code>) — pi loops over a codebase and builds a full Sphinx site
+with Draw.io architecture diagrams, derived deterministically from the IO map so they stay
+accurate even on small local models.</p></li>
+<li><p><strong>GitLab MR review</strong> (<code class="docutils literal notranslate"><span class="pre">secagent</span> <span class="pre">review</span></code>) — reviews merge requests, posts an initial comment,
+and replies in-thread when mentioned, steered by an editable persona.</p></li>
+<li><p><strong>C/C++ static analysis</strong> (<code class="docutils literal notranslate"><span class="pre">secagent</span> <span class="pre">analyze</span></code>) — runs IKOS (NASA’s abstract-interpretation
+analyzer) and enriches findings with the owning component and file purpose.</p></li>
+<li><p><strong>Memory/stability scan</strong> (<code class="docutils literal notranslate"><span class="pre">secagent</span> <span class="pre">scan</span></code>) — a configurable rule set (distilled from
+NASA/JPL Power of Ten, MISRA, CERT C, BARR-C) reviewed by the local model.</p></li>
+<li><p><strong>Auto test generation</strong> (<code class="docutils literal notranslate"><span class="pre">secagent</span> <span class="pre">testgen</span></code>) — drafts unit tests and functional
+component I/O tests from the structure and IO map.</p></li>
+<li><p><strong>Endpoint-agnostic</strong> — points at any OpenAI-compatible endpoint (llama.cpp, vLLM, or a
+gateway such as SecRouter); FIPS-compatible container images.</p></li>
+</ul>
+</section>
+<section id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">¶</a></h2>
+<p>Pointing at an existing SecRouter deployment, as yourself:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./install.sh<span class="w">                                </span><span class="c1"># install secagent (+ pi, if Node is present)</span>
+secagent<span class="w"> </span>init<span class="w"> </span>--domain<span class="w"> </span>&lt;your-suite-domain&gt;<span class="w">  </span><span class="c1"># wire up pi + secagent for that deployment</span>
+secagent<span class="w"> </span>login<span class="w">                              </span><span class="c1"># authenticate as yourself (device code)</span>
+</pre></div>
 </div>
-</noscript>
-
-<div id="search-results"></div>
+</section>
+<section id="learn-more">
+<h2>Learn more<a class="headerlink" href="#learn-more" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong><a class="reference external" href="https://github.com/secrouter/secagent">SecAgent on GitHub</a></strong> — source, issues, releases.</p></li>
+<li><p><strong><a class="reference external" href="https://github.com/secrouter/secagent/tree/main/docs">SecAgent docs</a></strong> — installation, the
+full-analysis / docs / review / static-analysis / scan / testgen use cases, the knowledge
+graph, and the CMMC control mapping.</p></li>
+</ul>
+</section>
+</section>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="secchat.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">SecChat — auditable team + agentic chat</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="secllm.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">SecLLM — a control plane for vLLM</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -308,8 +363,29 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">SecAgent — the agentic harness</a><ul>
+<li><a class="reference internal" href="#what-it-does">What it does</a></li>
+<li><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li><a class="reference internal" href="#learn-more">Learn more</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -318,8 +394,5 @@
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
-    
-<script src="_static/searchtools.js"></script>
-<script src="_static/language_data.js"></script>
-<script src="searchindex.js"></script></body>
+    </body>
 </html>

@@ -1,15 +1,15 @@
 <!doctype html>
 <html class="no-js" lang="en" data-content_root="./">
-  <head>
-<meta charset="utf-8">
+  <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="#">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="prev" title="SecProxy — edge reverse proxy" href="secproxy.html">
         <link rel="prefetch" href="_static/logo-mark.svg" as="image">
         <link rel="prefetch" href="_static/logo-mark-dark.svg" as="image">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
-<meta name="robots" content="noindex" />
-<title>Search - SecRouter Docs</title><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+        <title>SecDeploy — release train &amp; deployer - SecRouter Docs</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=bc976ec1" />
@@ -181,7 +181,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -201,7 +201,7 @@
     <span class="sidebar-brand-text">SecRouter Docs</span>
   </a>
   
-</div><form class="sidebar-search-container" method="get" action="#" role="search">
+</div><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
@@ -235,8 +235,8 @@
 <li class="toctree-l1"><a class="reference internal" href="secproxy.html">SecProxy — edge reverse proxy</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Orchestration</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="secdeploy.html">SecDeploy — release train &amp; deployer</a></li>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">SecDeploy — release train &amp; deployer</a></li>
 </ul>
 
 </div>
@@ -256,7 +256,9 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -264,22 +266,54 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          
-<noscript>
-<div class="admonition error">
-  <p class="admonition-title">Error</p>
-  <p>
-    Please activate JavaScript to enable the search functionality.
-  </p>
+          <section id="secdeploy-release-train-deployer">
+<h1>SecDeploy — release train &amp; deployer<a class="headerlink" href="#secdeploy-release-train-deployer" title="Link to this heading">¶</a></h1>
+<p><strong>SecDeploy</strong> turns the suite’s independent components into one versioned product: it pins a
+compatible, tested set of component tags (a suite “bill of materials”) and stands the whole
+stack up on each supported target, from a single command — air-gap friendly.</p>
+<section id="what-it-does">
+<h2>What it does<a class="headerlink" href="#what-it-does" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>One suite manifest</strong> (<code class="docutils literal notranslate"><span class="pre">suite.toml</span></code>) pins every component’s version for a release, so
+deploying a suite version gives you exactly that combination on any target.</p></li>
+<li><p><strong>Optional identity &amp; trust tier</strong> — SecCert, SecSSO, and secdns are the “start-from-zero”
+CA/IdP/DNS stack; provide them, or drop any you already run with <code class="docutils literal notranslate"><span class="pre">--without</span></code>.</p></li>
+<li><p><strong>Multi-host placement</strong> via <code class="docutils literal notranslate"><span class="pre">secsite.toml</span></code> — describe your hosts and which tier
+(identity / inference / gateway / collab / edge) runs where, with an interactive <code class="docutils literal notranslate"><span class="pre">configure</span></code>
+wizard (CLI or a local web page).</p></li>
+<li><p><strong>Two supported targets</strong> — <code class="docutils literal notranslate"><span class="pre">macos</span></code> (Docker Compose eval box) and <code class="docutils literal notranslate"><span class="pre">fedora-fips</span></code> (native,
+hardened systemd services linking the system OpenSSL FIPS provider, for production).</p></li>
+<li><p><strong>Air-gapped bundles</strong> — build on a connected host, carry one checksummed tarball into the
+enclave, and deploy offline.</p></li>
+<li><p><strong>Whole-suite operations</strong> — backup/restore into one FIPS-encrypted archive, deploy-audit
+hash-chain verification, and a suite-wide evidence command that pulls every reachable
+component’s evidence bundle into one file.</p></li>
+</ul>
+</section>
+<section id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>secdeploy<span class="w"> </span>verify<span class="w">        </span><span class="c1"># validate the manifest + target assets</span>
+uv<span class="w"> </span>run<span class="w"> </span>secdeploy<span class="w"> </span>plan<span class="w"> </span>macos<span class="w">    </span><span class="c1"># show pinned versions + steps for a target</span>
+uv<span class="w"> </span>run<span class="w"> </span>secdeploy<span class="w"> </span>fetch<span class="w">         </span><span class="c1"># checkout every component at its pinned ref → ./work</span>
+uv<span class="w"> </span>run<span class="w"> </span>secdeploy<span class="w"> </span>deploy<span class="w"> </span>macos<span class="w">  </span><span class="c1"># stand the suite up</span>
+</pre></div>
 </div>
-</noscript>
-
-<div id="search-results"></div>
+</section>
+<section id="learn-more">
+<h2>Learn more<a class="headerlink" href="#learn-more" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong><a class="reference external" href="https://github.com/secrouter/secdeploy">SecDeploy on GitHub</a></strong> — source, issues, releases.</p></li>
+<li><p><strong><a class="reference external" href="https://github.com/secrouter/secdeploy/tree/main/docs">SecDeploy docs</a></strong> — get-started,
+configuring a site, per-target deploy guides, feature docs (voice, agent pool, analysis
+sidecars), and the compliance mapping.</p></li>
+</ul>
+</section>
+</section>
 
         </article>
       </div>
@@ -287,7 +321,17 @@
         
         <div class="related-pages">
           
-          
+          <a class="prev-page" href="secproxy.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">SecProxy — edge reverse proxy</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -308,8 +352,29 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">SecDeploy — release train &amp; deployer</a><ul>
+<li><a class="reference internal" href="#what-it-does">What it does</a></li>
+<li><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li><a class="reference internal" href="#learn-more">Learn more</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -318,8 +383,5 @@
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
-    
-<script src="_static/searchtools.js"></script>
-<script src="_static/language_data.js"></script>
-<script src="searchindex.js"></script></body>
+    </body>
 </html>

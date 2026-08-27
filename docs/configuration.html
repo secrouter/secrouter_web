@@ -12,7 +12,7 @@
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=11b728c8" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=bc976ec1" />
     
     
 
@@ -207,11 +207,36 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="deploy.html">Deploy</a></li>
+  <p class="caption" role="heading"><span class="caption-text">Identity &amp; trust</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="seccert.html">SecCert — internal ACME certificate authority</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secsso.html">SecSSO — single sign-on for the suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secdns.html">secdns — internal authoritative DNS</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SecRouter (gateway)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="deploy.html">SecRouter (gateway)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="control-validation.html">Control Validation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Inference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secllm.html">SecLLM — a control plane for vLLM</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Agents &amp; collaboration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secagent.html">SecAgent — the agentic harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secchat.html">SecChat — auditable team + agentic chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secrecorder.html">SecRecorder — self-hosted transcription</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Edge</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secproxy.html">SecProxy — edge reverse proxy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Orchestration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secdeploy.html">SecDeploy — release train &amp; deployer</a></li>
 </ul>
 
 </div>
@@ -250,25 +275,26 @@
 <h1>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h1>
 <p>SecRouter reads a single JSON config file, resolved in this order:</p>
 <ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">FREEROUTER_CONFIG</span></code> environment variable</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">./freerouter.config.json</span></code> (working directory)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">~/.config/freerouter/config.json</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SECROUTER_CONFIG</span></code> environment variable</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">./secrouter.config.json</span></code> (working directory)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">~/.config/secrouter/config.json</span></code></p></li>
 </ol>
+<p>The legacy <code class="docutils literal notranslate"><span class="pre">FREEROUTER_CONFIG</span></code> variable and <code class="docutils literal notranslate"><span class="pre">freerouter.config.json</span></code> / <code class="docutils literal notranslate"><span class="pre">~/.config/freerouter/config.json</span></code> paths are still honored as fallbacks for back-compat — new deployments should use the <code class="docutils literal notranslate"><span class="pre">SECROUTER_*</span></code> names above.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">security</span></code> block is <strong>validated at startup and fails closed</strong> — the server refuses to boot in an unsafe configuration. Start production from the hardened reference config that ships with the release.</p>
 <section id="shape">
 <h2>Shape<a class="headerlink" href="#shape" title="Link to this heading">¶</a></h2>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;providers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;bedrock&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;api&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;openai&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;baseUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://bedrock-runtime.us-gov-west-1.amazonaws.com/openai/v1&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;auth&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;env&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AWS_BEARER_TOKEN_BEDROCK&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
-<span class="w">    </span><span class="nt">&quot;azure&quot;</span><span class="p">:</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;api&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;azure&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;baseUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://&lt;resource&gt;.openai.azure.us&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;apiVersion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-10-21&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;azureAuth&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;api-key&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;auth&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;env&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AZURE_OPENAI_API_KEY&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
-<span class="w">    </span><span class="nt">&quot;local&quot;</span><span class="p">:</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;api&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;openai&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;baseUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://llm.internal.example.url/v1&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="nt">"providers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"bedrock"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"api"</span><span class="p">:</span><span class="w"> </span><span class="s2">"openai"</span><span class="p">,</span><span class="w"> </span><span class="nt">"baseUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://bedrock-runtime.us-gov-west-1.amazonaws.com/openai/v1"</span><span class="p">,</span><span class="w"> </span><span class="nt">"auth"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"env"</span><span class="p">,</span><span class="w"> </span><span class="nt">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS_BEARER_TOKEN_BEDROCK"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"azure"</span><span class="p">:</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="nt">"api"</span><span class="p">:</span><span class="w"> </span><span class="s2">"azure"</span><span class="p">,</span><span class="w"> </span><span class="nt">"baseUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://&lt;resource&gt;.openai.azure.us"</span><span class="p">,</span><span class="w"> </span><span class="nt">"apiVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-10-21"</span><span class="p">,</span><span class="w"> </span><span class="nt">"azureAuth"</span><span class="p">:</span><span class="w"> </span><span class="s2">"api-key"</span><span class="p">,</span><span class="w"> </span><span class="nt">"auth"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"env"</span><span class="p">,</span><span class="w"> </span><span class="nt">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AZURE_OPENAI_API_KEY"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"local"</span><span class="p">:</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="nt">"api"</span><span class="p">:</span><span class="w"> </span><span class="s2">"openai"</span><span class="p">,</span><span class="w"> </span><span class="nt">"baseUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://llm.internal.example.url/v1"</span><span class="w"> </span><span class="p">}</span>
 <span class="w">  </span><span class="p">},</span>
-<span class="w">  </span><span class="nt">&quot;tiers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;SIMPLE&quot;</span><span class="p">:</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;primary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bedrock/openai.gpt-oss-20b-1:0&quot;</span><span class="p">,</span><span class="w">  </span><span class="nt">&quot;fallback&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;local/llama-3.3-70b-instruct&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
-<span class="w">    </span><span class="nt">&quot;MEDIUM&quot;</span><span class="p">:</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;primary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bedrock/openai.gpt-oss-120b-1:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;fallback&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;azure/gpt-4o&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
-<span class="w">    </span><span class="nt">&quot;COMPLEX&quot;</span><span class="p">:</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;primary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bedrock/openai.gpt-oss-120b-1:0&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;fallback&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;azure/gpt-4o&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="nt">"tiers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"SIMPLE"</span><span class="p">:</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"primary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bedrock/openai.gpt-oss-20b-1:0"</span><span class="p">,</span><span class="w">  </span><span class="nt">"fallback"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"local/llama-3.3-70b-instruct"</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"MEDIUM"</span><span class="p">:</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"primary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bedrock/openai.gpt-oss-120b-1:0"</span><span class="p">,</span><span class="w"> </span><span class="nt">"fallback"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"azure/gpt-4o"</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"COMPLEX"</span><span class="p">:</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="nt">"primary"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bedrock/openai.gpt-oss-120b-1:0"</span><span class="p">,</span><span class="w"> </span><span class="nt">"fallback"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"azure/gpt-4o"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
 <span class="w">  </span><span class="p">},</span>
-<span class="w">  </span><span class="nt">&quot;security&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;...&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;see below&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="nt">"security"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"..."</span><span class="p">:</span><span class="w"> </span><span class="s2">"see below"</span><span class="w"> </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -306,38 +332,38 @@
 </section>
 <section id="the-security-block">
 <h2>The <code class="docutils literal notranslate"><span class="pre">security</span></code> block<a class="headerlink" href="#the-security-block" title="Link to this heading">¶</a></h2>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;security&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;requireFips&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">"security"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"requireFips"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 
-<span class="w">  </span><span class="nt">&quot;oidc&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;issuer&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://idp.example.url/realms/cui&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;audience&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;secrouter&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;requireMfa&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;groupsClaim&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;groups&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;clientId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;secrouter-admin-console&quot;</span>
+<span class="w">  </span><span class="nt">"oidc"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"issuer"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://idp.example.url/realms/cui"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"audience"</span><span class="p">:</span><span class="w"> </span><span class="s2">"secrouter"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"requireMfa"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"groupsClaim"</span><span class="p">:</span><span class="w"> </span><span class="s2">"groups"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"clientId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"secrouter-admin-console"</span>
 <span class="w">  </span><span class="p">},</span>
 
-<span class="w">  </span><span class="nt">&quot;classification&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CUI&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;levels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;UNCLASSIFIED&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;CUI&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"classification"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CUI"</span><span class="p">,</span><span class="w"> </span><span class="nt">"levels"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"UNCLASSIFIED"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CUI"</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
 
-<span class="w">  </span><span class="nt">&quot;egress&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;allowlist&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;provider&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bedrock&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;allowedHost&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bedrock-runtime.us-gov-west-1.amazonaws.com&quot;</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;authorizedClassifications&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;CUI&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="nt">"egress"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"allowlist"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span><span class="w"> </span><span class="nt">"provider"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bedrock"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"allowedHost"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bedrock-runtime.us-gov-west-1.amazonaws.com"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"authorizedClassifications"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"CUI"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
 <span class="w">    </span><span class="p">]</span>
 <span class="w">  </span><span class="p">},</span>
 
-<span class="w">  </span><span class="nt">&quot;policy&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;allowedTiers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;SIMPLE&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;MEDIUM&quot;</span><span class="p">],</span><span class="w"> </span><span class="nt">&quot;budgets&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">&quot;window&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;day&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;maxCostUsd&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">},</span>
-<span class="w">    </span><span class="nt">&quot;groups&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="nt">&quot;secrouter-admins&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;admin&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
-<span class="w">      </span><span class="nt">&quot;power-users&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;allowedTiers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;SIMPLE&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;MEDIUM&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;COMPLEX&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;REASONING&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="nt">"policy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"default"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"allowedTiers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"SIMPLE"</span><span class="p">,</span><span class="w"> </span><span class="s2">"MEDIUM"</span><span class="p">],</span><span class="w"> </span><span class="nt">"budgets"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nt">"window"</span><span class="p">:</span><span class="w"> </span><span class="s2">"day"</span><span class="p">,</span><span class="w"> </span><span class="nt">"maxCostUsd"</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="w"> </span><span class="p">}]</span><span class="w"> </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"secrouter-admins"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"admin"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">"power-users"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"allowedTiers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"SIMPLE"</span><span class="p">,</span><span class="w"> </span><span class="s2">"MEDIUM"</span><span class="p">,</span><span class="w"> </span><span class="s2">"COMPLEX"</span><span class="p">,</span><span class="w"> </span><span class="s2">"REASONING"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">},</span>
 
-<span class="w">  </span><span class="nt">&quot;audit&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;sink&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;both&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;syslog&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;host&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;siem.example.url&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">6514</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;protocol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tcp&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
-<span class="w">  </span><span class="nt">&quot;tls&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;frontend&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="nt">"audit"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"sink"</span><span class="p">:</span><span class="w"> </span><span class="s2">"both"</span><span class="p">,</span><span class="w"> </span><span class="nt">"syslog"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"host"</span><span class="p">:</span><span class="w"> </span><span class="s2">"siem.example.url"</span><span class="p">,</span><span class="w"> </span><span class="nt">"port"</span><span class="p">:</span><span class="w"> </span><span class="mi">6514</span><span class="p">,</span><span class="w"> </span><span class="nt">"protocol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tcp"</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"tls"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"mode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"frontend"</span><span class="w"> </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -387,7 +413,7 @@
 <section id="reload-without-restart">
 <h2>Reload without restart<a class="headerlink" href="#reload-without-restart" title="Link to this heading">¶</a></h2>
 <p>Edit the config, then have an admin POST to reload — the new config is re-validated (fail-closed) before it’s applied:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span><span class="w"> </span>https://secrouter.example.url/reload-config
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">"</span><span class="w"> </span>https://secrouter.example.url/reload-config
 </pre></div>
 </div>
 <p>Policy and tier→model edits made in the <strong>admin console</strong> apply live without a reload.</p>

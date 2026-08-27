@@ -49,6 +49,68 @@ deep mode: Why does this recursive CTE produce duplicates?
 | `complex`, `advanced` | COMPLEX |
 | `max`, `reasoning`, `think`, `deep` | REASONING |
 
+## Routing experiments
+
+Two independent, off-by-default features, configured under `experiments` in
+`secrouter.config.json`. Both are validated fail-loud at startup/reload — an invalid block
+refuses to (re)load rather than silently misrouting live traffic.
+
+### Split (A/B) routing
+
+Assign a tier's traffic across two or more candidate models by weight, e.g. to benchmark a new
+model against the incumbent:
+
+```json
+"experiments": {
+  "split": {
+    "enabled": true,
+    "name": "sonnet-vs-candidate",
+    "tiers": {
+      "MEDIUM": {
+        "variants": [
+          { "model": "azure/gpt-4o", "weight": 90 },
+          { "model": "bedrock/openai.gpt-oss-120b-1:0", "weight": 10 }
+        ]
+      }
+    }
+  }
+}
+```
+
+Every non-`EXPLICIT` request that resolves to that tier is weighted-randomly assigned a
+variant. Read the assignment back from the `X-SecRouter-Split` response header, the Access
+Log's `route.decision` events, or the `secrouter_split_assigned_total{tier,model}` Prometheus
+counter. A per-user policy denial/downgrade still overrides the assignment — split runs before
+both health-aware steering and policy authorization.
+
+### Escalation routing
+
+Draft cheap, judge the draft, and escalate to a stronger tier only when needed:
+
+```json
+"experiments": {
+  "escalation": {
+    "enabled": true,
+    "fromTiers": ["SIMPLE"],
+    "toTier": "MEDIUM",
+    "judge": { "mode": "heuristic", "timeoutMs": 10000, "minDraftChars": 1 }
+  }
+}
+```
+
+For a matching, non-streaming request, SecRouter drafts a response on `fromTiers`, then judges
+it (`heuristic` — empty/truncated/refusal-matched/too-short draft; or `model` — a rubric prompt
+that fails open to *accept* on timeout or unparseable output). An accepted draft is served as-is
+(`X-SecRouter-Escalation: accepted`); an escalated request is re-authorized and forwarded fresh
+to `toTier` (`X-SecRouter-Escalation: escalated`, `X-SecRouter-Tier` becomes `toTier`) — or, if
+`toTier` has no model or policy denies it, the draft is served instead
+(`escalation_denied`). Escalation never fires on `stream: true` or `EXPLICIT` (pinned-model)
+requests. Every draft, accept, escalate, and denial is an audited event, alongside the
+`secrouter_escalations_total{from_tier,to_tier,outcome}` metric.
+
+Split and escalation compose: split resolves which model a tier's chain starts with, and
+escalation then drafts on that chain before deciding whether to escalate.
+
 ## Embeddings
 
 `POST /v1/embeddings` is governed exactly like chat — same OIDC auth, per-user model policy, classification clearance, deny-by-default egress, quota, and per-user cost accounting — so RAG pipelines run **through** the control plane instead of around it.
