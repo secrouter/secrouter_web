@@ -1,15 +1,15 @@
 <!doctype html>
 <html class="no-js" lang="en" data-content_root="./">
-  <head>
-<meta charset="utf-8">
+  <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="#">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="SecRecorder — self-hosted transcription" href="secrecorder.html"><link rel="prev" title="SecAgent — the agentic harness" href="secagent.html">
         <link rel="prefetch" href="_static/logo-mark.svg" as="image">
         <link rel="prefetch" href="_static/logo-mark-dark.svg" as="image">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
-<meta name="robots" content="noindex" />
-<title>Search - SecRouter Docs</title><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+        <title>SecChat — auditable team + agentic chat - SecRouter Docs</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=bc976ec1" />
@@ -181,7 +181,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -201,7 +201,7 @@
     <span class="sidebar-brand-text">SecRouter Docs</span>
   </a>
   
-</div><form class="sidebar-search-container" method="get" action="#" role="search">
+</div><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
@@ -225,9 +225,9 @@
 <li class="toctree-l1"><a class="reference internal" href="secllm.html">SecLLM — a control plane for vLLM</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Agents &amp; collaboration</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="secagent.html">SecAgent — the agentic harness</a></li>
-<li class="toctree-l1"><a class="reference internal" href="secchat.html">SecChat — auditable team + agentic chat</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">SecChat — auditable team + agentic chat</a></li>
 <li class="toctree-l1"><a class="reference internal" href="secrecorder.html">SecRecorder — self-hosted transcription</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Edge</span></p>
@@ -256,7 +256,9 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -264,30 +266,81 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          
-<noscript>
-<div class="admonition error">
-  <p class="admonition-title">Error</p>
-  <p>
-    Please activate JavaScript to enable the search functionality.
-  </p>
+          <section id="secchat-auditable-team-agentic-chat">
+<h1>SecChat — auditable team + agentic chat<a class="headerlink" href="#secchat-auditable-team-agentic-chat" title="Link to this heading">¶</a></h1>
+<p><strong>SecChat</strong> is auditable team chat <em>and</em> agentic chat in one app, for CUI / air-gapped
+enclaves — people talk to each other, spawn governed coding/assistant agents, hold voice and
+video calls, and every message is tamper-evidently logged.</p>
+<section id="what-it-does">
+<h2>What it does<a class="headerlink" href="#what-it-does" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Auditable by construction</strong> — every message links into a per-channel SHA-256 hash chain
+bound to the content <em>hash</em> (not the plaintext), plus a metadata-only audit chain; tampering
+is detectable and CUI spillage stays purgeable.</p></li>
+<li><p><strong>Agents are first-class and governed</strong> — spawn a SecAgent tied to you; it runs in <em>plan
+mode</em> by default, and only you can authorize code-executing work. Its model calls run
+through SecRouter, attributed and budgeted to you.</p></li>
+<li><p><strong>SSO from the ground up</strong> — every session is a SecSSO (Authentik) session, validated via
+JWKS. No local passwords.</p></li>
+<li><p><strong>Native voice &amp; video calling</strong> — 1:1 and group calls ride the same WebRTC signaling as the
+chat WebSocket hub. Video is <strong>live-only</strong>: camera and screen share work during a call but
+are never recorded. A <em>consented</em> call is recorded <strong>audio-only</strong> by the <code class="docutils literal notranslate"><span class="pre">secchat-mediad</span></code>
+relay, then transcribed via SecRecorder into a speaker-exact transcript and posted to the
+channel with a best-effort LLM summary — either can be corrected afterward as a normal,
+chain-bound message revision.</p></li>
+<li><p><strong>Optional Kubernetes agent pool</strong> — runs a coding agent in a server-launched, ephemeral pod
+instead of the user’s desktop; the execute-gate stays on the server either way.</p></li>
+<li><p><strong>Light/dark theme</strong> — a top-bar toggle switches the whole app, remembered across launches.</p></li>
+</ul>
+</section>
+<section id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+<span class="c1"># set SECCHAT_OIDC_ISSUER / SECCHAT_OIDC_AUDIENCE (SecSSO) and PG_PASSWORD</span>
+./bootstrap/secchat.sh<span class="w"> </span>up<span class="w">          </span><span class="c1"># build + start, wait for /healthz, print the wiring readout</span>
+</pre></div>
 </div>
-</noscript>
-
-<div id="search-results"></div>
+</section>
+<section id="learn-more">
+<h2>Learn more<a class="headerlink" href="#learn-more" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong><a class="reference external" href="https://github.com/secrouter/secchat">SecChat on GitHub</a></strong> — source, issues, releases.</p></li>
+<li><p><strong><a class="reference external" href="https://github.com/secrouter/secchat/tree/main/docs">SecChat docs</a></strong> — configuration, a
+user-facing usage tour, the auth/marking/audit security model, and the CMMC control mapping.</p></li>
+</ul>
+</section>
+</section>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="secrecorder.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">SecRecorder — self-hosted transcription</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="secagent.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">SecAgent — the agentic harness</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -308,8 +361,29 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">SecChat — auditable team + agentic chat</a><ul>
+<li><a class="reference internal" href="#what-it-does">What it does</a></li>
+<li><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li><a class="reference internal" href="#learn-more">Learn more</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -318,8 +392,5 @@
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
-    
-<script src="_static/searchtools.js"></script>
-<script src="_static/language_data.js"></script>
-<script src="searchindex.js"></script></body>
+    </body>
 </html>

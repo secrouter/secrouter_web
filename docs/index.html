@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Deploy" href="deploy.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="SecCert — internal ACME certificate authority" href="seccert.html">
         <link rel="prefetch" href="_static/logo-mark.svg" as="image">
         <link rel="prefetch" href="_static/logo-mark-dark.svg" as="image">
 
@@ -12,7 +12,7 @@
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=11b728c8" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=bc976ec1" />
     
     
 
@@ -207,11 +207,36 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul>
-<li class="toctree-l1"><a class="reference internal" href="deploy.html">Deploy</a></li>
+  <p class="caption" role="heading"><span class="caption-text">Identity &amp; trust</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="seccert.html">SecCert — internal ACME certificate authority</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secsso.html">SecSSO — single sign-on for the suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secdns.html">secdns — internal authoritative DNS</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SecRouter (gateway)</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="deploy.html">SecRouter (gateway)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="control-validation.html">Control Validation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Inference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secllm.html">SecLLM — a control plane for vLLM</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Agents &amp; collaboration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secagent.html">SecAgent — the agentic harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secchat.html">SecChat — auditable team + agentic chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secrecorder.html">SecRecorder — self-hosted transcription</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Edge</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secproxy.html">SecProxy — edge reverse proxy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Orchestration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secdeploy.html">SecDeploy — release train &amp; deployer</a></li>
 </ul>
 
 </div>
@@ -246,84 +271,83 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="secrouter-documentation">
-<h1>SecRouter documentation<a class="headerlink" href="#secrouter-documentation" title="Link to this heading">¶</a></h1>
-<p><strong>SecRouter</strong> is a self-hosted, OpenAI-compatible AI gateway that sits in front of your LLMs and enforces governance and cost control on every request — chat, embeddings, and agentic <strong>MCP tool calls</strong> alike: SSO authentication, per-user policy and budgets, deny-by-default egress with a data-classification gate, and a hash-chained, metadata-only audit log.</p>
-<p>It’s a drop-in endpoint — point any OpenAI-compatible client at SecRouter, change the base URL, and keep your code.</p>
-<div class="tip admonition">
-<p class="admonition-title">What it does</p>
-<p><strong>Govern</strong> — OIDC SSO + MFA, per-user/group allowlists for models <em>and</em> MCP tools, deny-by-default egress. Chat, embeddings, and tool calls all pass the same gates.
-<strong>Contain spend</strong> — per-user token &amp; cost tracking, budgets, rate limits, smart routing.
-<strong>Stay up</strong> — a per-provider circuit breaker fails fast to the next authorized model; Prometheus <code class="docutils literal notranslate"><span class="pre">/metrics</span></code> + W3C trace propagation feed your SOC.
-<strong>Prove it</strong> — tamper-evident audit and one-click evidence export, mapped to NIST 800-171 R2 / CMMC L3 controls.</p>
-</div>
-<section id="get-started">
-<h2>Get started<a class="headerlink" href="#get-started" title="Link to this heading">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="deploy.html">Deploy</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html#run-the-container">Run the container</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html#production-configuration">Production configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html#tls-fips">TLS &amp; FIPS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html#model-providers-bedrock-azure">Model providers (Bedrock ↔ Azure)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html#govcloud-air-gap">GovCloud &amp; air-gap</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html#systemd-non-container">systemd (non-container)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html#fail-closed-startup">Fail-closed startup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deploy.html#health-restart">Health &amp; restart</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#authenticate">Authenticate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#make-a-request">Make a request</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#smart-routing-overrides">Smart routing &amp; overrides</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#embeddings">Embeddings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#mcp-tool-gateway">MCP tool gateway</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#endpoints">Endpoints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#see-your-usage">See your usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#admin-console">Admin console</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#add-a-local-or-on-prem-endpoint">Add a local or on-prem endpoint</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage.html#client-integration-openai-sdks">Client integration (OpenAI SDKs)</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="configuration.html#shape">Shape</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configuration.html#the-security-block">The <code class="docutils literal notranslate"><span class="pre">security</span></code> block</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configuration.html#reload-without-restart">Reload without restart</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="control-validation.html">Control Validation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="control-validation.html#the-fast-path-one-click-evidence-bundle">The fast path: one-click evidence bundle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="control-validation.html#artifacts-at-a-glance">Artifacts at a glance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="control-validation.html#audit-trail-au-3-3-x">Audit trail — AU 3.3.x</a></li>
-<li class="toctree-l2"><a class="reference internal" href="control-validation.html#access-policy-identity-ac-3-1-x-ia-3-5-x">Access policy &amp; identity — AC 3.1.x / IA 3.5.x</a></li>
-<li class="toctree-l2"><a class="reference internal" href="control-validation.html#egress-data-flow-control-ac-3-1-3-sc-3-13-6">Egress / data-flow control — AC 3.1.3 / SC 3.13.6</a></li>
-<li class="toctree-l2"><a class="reference internal" href="control-validation.html#usage-accountability-au-3-3-2">Usage &amp; accountability — AU 3.3.2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="control-validation.html#configuration-baseline-change-control-cm-3-4-x">Configuration baseline &amp; change control — CM 3.4.x</a></li>
-<li class="toctree-l2"><a class="reference internal" href="control-validation.html#crypto-fips-posture-sc-3-13-8-3-13-11">Crypto / FIPS posture — SC 3.13.8 / 3.13.11</a></li>
-<li class="toctree-l2"><a class="reference internal" href="control-validation.html#collect-an-assessment-package">Collect an assessment package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="control-validation.html#shared-responsibility">Shared responsibility</a></li>
-<li class="toctree-l2"><a class="reference internal" href="control-validation.html#control-map">Control map</a></li>
-</ul>
-</li>
-</ul>
-</div>
+          <section id="the-secrouter-suite-documentation">
+<h1>The SecRouter suite — documentation<a class="headerlink" href="#the-secrouter-suite-documentation" title="Link to this heading">¶</a></h1>
+<p>The <strong>SecRouter suite</strong> is a self-hostable set of components for running AI securely inside a
+closed or regulated network: a governed gateway in front of every model, the identity/inference/
+collaboration pieces around it, and one orchestrator that pins a tested version of the whole
+stack and deploys it — air-gap friendly. Every piece is open source (Apache 2.0) and independent:
+run the ones you need, drop the ones you already have.</p>
+<p>This hub covers all of it. <strong><a class="reference internal" href="deploy.html"><span class="std std-doc">SecRouter</span></a></strong>, the governed AI gateway at the center,
+keeps its own four-page section; every other component gets a short overview page here linking
+out to its repo and its own in-depth docs.</p>
+<section id="identity-trust">
+<h2>Identity &amp; trust<a class="headerlink" href="#identity-trust" title="Link to this heading">¶</a></h2>
+<p><em>Optional — provide these when you have nothing, drop them when you already run an IdP/CA/DNS.</em></p>
 <ul class="simple">
-<li><p><strong><a class="reference internal" href="deploy.html"><span class="std std-doc">Deploy</span></a></strong> — run the container in your boundary: production config, TLS/FIPS, GovCloud, air-gap, systemd.</p></li>
-<li><p><strong><a class="reference internal" href="usage.html"><span class="std std-doc">Usage</span></a></strong> — the API, authentication, the admin console, smart routing, adding endpoints.</p></li>
-<li><p><strong><a class="reference internal" href="configuration.html"><span class="std std-doc">Configuration</span></a></strong> — providers, tiers, models, and the security block.</p></li>
-<li><p><strong><a class="reference internal" href="control-validation.html"><span class="std std-doc">Control Validation</span></a></strong> — retrieve the CMMC artifacts: audit, access policy, egress, FIPS posture, and a one-click evidence bundle.</p></li>
+<li><p><strong><a class="reference internal" href="seccert.html"><span class="std std-doc">SecCert</span></a></strong> — internal ACME (RFC 8555) certificate authority; issues the suite’s
+TLS certs on closed or air-gapped networks.</p></li>
+<li><p><strong><a class="reference internal" href="secsso.html"><span class="std std-doc">SecSSO</span></a></strong> — single sign-on (Authentik), pre-wired OIDC blueprints and suite
+branding. Drop it the moment you have Okta, Entra, or Keycloak.</p></li>
+<li><p><strong><a class="reference internal" href="secdns.html"><span class="std std-doc">secdns</span></a></strong> — zero-dependency authoritative DNS; resolves the suite’s internal
+<code class="docutils literal notranslate"><span class="pre">*.internal</span></code> names when you run no DNS of your own.</p></li>
 </ul>
 </section>
-<section id="the-request-pipeline">
-<h2>The request pipeline<a class="headerlink" href="#the-request-pipeline" title="Link to this heading">¶</a></h2>
-<p>Every call flows through four gates, with usage metered and everything logged:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>client ──▶ AuthN ──▶ AuthZ ──▶ route ──▶ egress gate ──▶ authorized model
-          (OIDC)    (policy +   (cheapest   (deny-by-default
-                     quota)     capable)     + data residency)
-</pre></div>
+<section id="gateway">
+<h2>Gateway<a class="headerlink" href="#gateway" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong><a class="reference internal" href="deploy.html"><span class="std std-doc">SecRouter</span></a></strong> — the governed AI gateway: authenticate every request, enforce
+model/tool/budget policy, gate egress, route (including A/B and escalation experiments), fail
+over dead providers, and log every decision. See the <strong>SecRouter (gateway)</strong> section in the
+sidebar for deploy, usage, configuration, and control-validation guides.</p></li>
+</ul>
+</section>
+<section id="inference">
+<h2>Inference<a class="headerlink" href="#inference" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong><a class="reference internal" href="secllm.html"><span class="std std-doc">SecLLM</span></a></strong> — a friendly control plane for vLLM: curated model catalog,
+load/unload/reload, health management, and an OpenAI-compatible endpoint. SecRouter routes to
+it as a local, in-boundary provider.</p></li>
+</ul>
+</section>
+<section id="agents-collaboration">
+<h2>Agents &amp; collaboration<a class="headerlink" href="#agents-collaboration" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong><a class="reference internal" href="secagent.html"><span class="std std-doc">SecAgent</span></a></strong> — the agentic harness (pi + an affordance engine) behind MR
+review, static analysis, and docs/test generation. Every model call it makes is governed
+through SecRouter.</p></li>
+<li><p><strong><a class="reference internal" href="secchat.html"><span class="std std-doc">SecChat</span></a></strong> — auditable team chat <em>and</em> agentic chat in one app: SSO via SecSSO,
+tamper-evident hash-chained audit, owner-gated coding agents, and native voice &amp; video calling.</p></li>
+<li><p><strong><a class="reference internal" href="secrecorder.html"><span class="std std-doc">SecRecorder</span></a></strong> — self-hosted Whisper transcription with optional speaker
+diarization; meeting audio and transcripts never leave the boundary.</p></li>
+</ul>
+</section>
+<section id="edge">
+<h2>Edge<a class="headerlink" href="#edge" title="Link to this heading">¶</a></h2>
+<p><em>Optional infrastructure.</em></p>
+<ul class="simple">
+<li><p><strong><a class="reference internal" href="secproxy.html"><span class="std std-doc">SecProxy</span></a></strong> — edge reverse proxy; one HTTPS front door (<code class="docutils literal notranslate"><span class="pre">:443</span></code>) for the
+suite’s web and API services, FIPS-clean on hardened hosts.</p></li>
+</ul>
+</section>
+<section id="orchestration">
+<h2>Orchestration<a class="headerlink" href="#orchestration" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong><a class="reference internal" href="secdeploy.html"><span class="std std-doc">SecDeploy</span></a></strong> — release train and deploy orchestration: one pinned, tested
+suite version per target, from a macOS eval box to a FIPS-ready Fedora host.</p></li>
+</ul>
+<div class="toctree-wrapper compound">
 </div>
-<p>If any gate says no, the request never leaves your boundary.</p>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
 </section>
 </section>
 
@@ -332,12 +356,12 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="deploy.html">
+          <a class="next-page" href="seccert.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Deploy</div>
+                <div class="title">SecCert — internal ACME certificate authority</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -374,9 +398,15 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">SecRouter documentation</a><ul>
-<li><a class="reference internal" href="#get-started">Get started</a></li>
-<li><a class="reference internal" href="#the-request-pipeline">The request pipeline</a></li>
+<li><a class="reference internal" href="#">The SecRouter suite — documentation</a><ul>
+<li><a class="reference internal" href="#identity-trust">Identity &amp; trust</a></li>
+<li><a class="reference internal" href="#gateway">Gateway</a></li>
+<li><a class="reference internal" href="#inference">Inference</a></li>
+<li><a class="reference internal" href="#agents-collaboration">Agents &amp; collaboration</a></li>
+<li><a class="reference internal" href="#edge">Edge</a></li>
+<li><a class="reference internal" href="#orchestration">Orchestration</a><ul>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

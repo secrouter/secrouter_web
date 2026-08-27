@@ -2,9 +2,11 @@
 
 SecRouter reads a single JSON config file, resolved in this order:
 
-1. `FREEROUTER_CONFIG` environment variable
-2. `./freerouter.config.json` (working directory)
-3. `~/.config/freerouter/config.json`
+1. `SECROUTER_CONFIG` environment variable
+2. `./secrouter.config.json` (working directory)
+3. `~/.config/secrouter/config.json`
+
+The legacy `FREEROUTER_CONFIG` variable and `freerouter.config.json` / `~/.config/freerouter/config.json` paths are still honored as fallbacks for back-compat — new deployments should use the `SECROUTER_*` names above.
 
 The `security` block is **validated at startup and fails closed** — the server refuses to boot in an unsafe configuration. Start production from the hardened reference config that ships with the release.
 

@@ -40,6 +40,7 @@ The bundle's `controls` section is a live, family-level self-assessment generate
 |---|---|---|---|
 | Audit log | Every auth / authz / routing / usage / admin event, traceable to a principal, **metadata-only** | AU 3.3.1, 3.3.2 | `GET /admin/api/audit` · SQLite · syslog |
 | Audit-chain verification | The log is **tamper-evident** (SHA-256 hash chain) | AU 3.3.8 | `GET /admin/api/audit/verify` |
+| Audit retention | Configurable prune window; a self-attesting `audit.pruned` anchor event keeps the chain verifiable across pruning | AU 3.3.1, 3.3.8 | `security.audit.retentionDays` · evidence bundle `controls` |
 | Access policy | Who may use which tier/model — least privilege | AC 3.1.1, 3.1.2, 3.1.5 | `GET /admin/api/config` → `policy` |
 | Identity &amp; MFA | OIDC SSO with MFA enforced | IA 3.5.1–3.5.3 | config `oidc` · audit `auth.success` |
 | Egress allow-list | CUI reaches only authorized destinations (deny-by-default) | AC 3.1.3, SC 3.13.6 | `GET /admin/api/config` → `egress` |
@@ -67,6 +68,8 @@ curl -fsS "${auth[@]}" "$BASE/admin/api/audit/verify"
 ```
 
 **Forward to your SIEM (AU 3.3.x, 800-172).** Set `security.audit.sink: "both"` with a `syslog` target (RFC 5424, CEF or JSON) — see [Configuration](configuration.md). The authoritative record is the SQLite store at `security.storePath`; syslog is the SOC copy.
+
+**Audit retention (AU 3.3.1).** `security.audit.retentionDays` (default `0` = keep forever) enables a daily background job that deletes audit rows older than the retention window. Naively deleting old rows would break chain verification — the oldest surviving row's `prevHash` would point at a hash that no longer exists — so every prune cycle first emits a self-attesting `audit.pruned` event (`deletedCount`, `throughId`, `anchorHash`) through the normal fail-closed auditor, and only deletes rows once that event is durably recorded. `verifyAuditChain` trusts `audit.pruned`'s `anchorHash` as the new chain root when present, so tamper-evidence (AU 3.3.8) holds across pruning. The evidence bundle reports the configured `retentionDays` and status (`"pruned after Nd"` or `"retained indefinitely"`) under `AU-3.3.1` — your enclave still owns long-term/legal-hold archival beyond what the local store retains (export via `audit.syslog` to your SIEM before the window expires).
 
 **Operational metrics and trace correlation.** Enable `security.metrics` to expose `GET /metrics` (Prometheus) — request / token / cost / error counters and latency histograms with bounded labels (no principal ids) — for Grafana dashboards and Alertmanager thresholds. And when a caller sends a W3C `traceparent`, its trace id is recorded on the audit row, so audit events join to your APM traces (AU 3.3.5). Together these feed the monitoring controls (SI 3.14.6 / 3.14.7).
 

@@ -1,21 +1,73 @@
-# SecRouter documentation
+# The SecRouter suite — documentation
 
-**SecRouter** is a self-hosted, OpenAI-compatible AI gateway that sits in front of your LLMs and enforces governance and cost control on every request — chat, embeddings, and agentic **MCP tool calls** alike: SSO authentication, per-user policy and budgets, deny-by-default egress with a data-classification gate, and a hash-chained, metadata-only audit log.
+The **SecRouter suite** is a self-hostable set of components for running AI securely inside a
+closed or regulated network: a governed gateway in front of every model, the identity/inference/
+collaboration pieces around it, and one orchestrator that pins a tested version of the whole
+stack and deploys it — air-gap friendly. Every piece is open source (Apache 2.0) and independent:
+run the ones you need, drop the ones you already have.
 
-It's a drop-in endpoint — point any OpenAI-compatible client at SecRouter, change the base URL, and keep your code.
+This hub covers all of it. **[SecRouter](deploy.md)**, the governed AI gateway at the center,
+keeps its own four-page section; every other component gets a short overview page here linking
+out to its repo and its own in-depth docs.
 
-```{admonition} What it does
-:class: tip
-**Govern** — OIDC SSO + MFA, per-user/group allowlists for models *and* MCP tools, deny-by-default egress. Chat, embeddings, and tool calls all pass the same gates.
-**Contain spend** — per-user token & cost tracking, budgets, rate limits, smart routing.
-**Stay up** — a per-provider circuit breaker fails fast to the next authorized model; Prometheus `/metrics` + W3C trace propagation feed your SOC.
-**Prove it** — tamper-evident audit and one-click evidence export, mapped to NIST 800-171 R2 / CMMC L3 controls.
-```
+## Identity & trust
 
-## Get started
+*Optional — provide these when you have nothing, drop them when you already run an IdP/CA/DNS.*
+
+- **[SecCert](seccert.md)** — internal ACME (RFC 8555) certificate authority; issues the suite's
+  TLS certs on closed or air-gapped networks.
+- **[SecSSO](secsso.md)** — single sign-on (Authentik), pre-wired OIDC blueprints and suite
+  branding. Drop it the moment you have Okta, Entra, or Keycloak.
+- **[secdns](secdns.md)** — zero-dependency authoritative DNS; resolves the suite's internal
+  `*.internal` names when you run no DNS of your own.
+
+## Gateway
+
+- **[SecRouter](deploy.md)** — the governed AI gateway: authenticate every request, enforce
+  model/tool/budget policy, gate egress, route (including A/B and escalation experiments), fail
+  over dead providers, and log every decision. See the **SecRouter (gateway)** section in the
+  sidebar for deploy, usage, configuration, and control-validation guides.
+
+## Inference
+
+- **[SecLLM](secllm.md)** — a friendly control plane for vLLM: curated model catalog,
+  load/unload/reload, health management, and an OpenAI-compatible endpoint. SecRouter routes to
+  it as a local, in-boundary provider.
+
+## Agents & collaboration
+
+- **[SecAgent](secagent.md)** — the agentic harness (pi + an affordance engine) behind MR
+  review, static analysis, and docs/test generation. Every model call it makes is governed
+  through SecRouter.
+- **[SecChat](secchat.md)** — auditable team chat *and* agentic chat in one app: SSO via SecSSO,
+  tamper-evident hash-chained audit, owner-gated coding agents, and native voice & video calling.
+- **[SecRecorder](secrecorder.md)** — self-hosted Whisper transcription with optional speaker
+  diarization; meeting audio and transcripts never leave the boundary.
+
+## Edge
+
+*Optional infrastructure.*
+
+- **[SecProxy](secproxy.md)** — edge reverse proxy; one HTTPS front door (`:443`) for the
+  suite's web and API services, FIPS-clean on hardened hosts.
+
+## Orchestration
+
+- **[SecDeploy](secdeploy.md)** — release train and deploy orchestration: one pinned, tested
+  suite version per target, from a macOS eval box to a FIPS-ready Fedora host.
 
 ```{toctree}
-:maxdepth: 2
+:hidden:
+:caption: Identity & trust
+
+seccert
+secsso
+secdns
+```
+
+```{toctree}
+:hidden:
+:caption: SecRouter (gateway)
 
 deploy
 usage
@@ -23,19 +75,32 @@ configuration
 control-validation
 ```
 
-- **[Deploy](deploy.md)** — run the container in your boundary: production config, TLS/FIPS, GovCloud, air-gap, systemd.
-- **[Usage](usage.md)** — the API, authentication, the admin console, smart routing, adding endpoints.
-- **[Configuration](configuration.md)** — providers, tiers, models, and the security block.
-- **[Control Validation](control-validation.md)** — retrieve the CMMC artifacts: audit, access policy, egress, FIPS posture, and a one-click evidence bundle.
+```{toctree}
+:hidden:
+:caption: Inference
 
-## The request pipeline
-
-Every call flows through four gates, with usage metered and everything logged:
-
-```text
-client ──▶ AuthN ──▶ AuthZ ──▶ route ──▶ egress gate ──▶ authorized model
-          (OIDC)    (policy +   (cheapest   (deny-by-default
-                     quota)     capable)     + data residency)
+secllm
 ```
 
-If any gate says no, the request never leaves your boundary.
+```{toctree}
+:hidden:
+:caption: Agents & collaboration
+
+secagent
+secchat
+secrecorder
+```
+
+```{toctree}
+:hidden:
+:caption: Edge
+
+secproxy
+```
+
+```{toctree}
+:hidden:
+:caption: Orchestration
+
+secdeploy
+```

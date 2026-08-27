@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="prev" title="Configuration" href="configuration.html">
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="SecLLM — a control plane for vLLM" href="secllm.html"><link rel="prev" title="Configuration" href="configuration.html">
         <link rel="prefetch" href="_static/logo-mark.svg" as="image">
         <link rel="prefetch" href="_static/logo-mark-dark.svg" as="image">
 
@@ -12,7 +12,7 @@
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=11b728c8" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=bc976ec1" />
     
     
 
@@ -207,11 +207,36 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="deploy.html">Deploy</a></li>
+  <p class="caption" role="heading"><span class="caption-text">Identity &amp; trust</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="seccert.html">SecCert — internal ACME certificate authority</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secsso.html">SecSSO — single sign-on for the suite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secdns.html">secdns — internal authoritative DNS</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">SecRouter (gateway)</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="deploy.html">SecRouter (gateway)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Control Validation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Inference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secllm.html">SecLLM — a control plane for vLLM</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Agents &amp; collaboration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secagent.html">SecAgent — the agentic harness</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secchat.html">SecChat — auditable team + agentic chat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="secrecorder.html">SecRecorder — self-hosted transcription</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Edge</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secproxy.html">SecProxy — edge reverse proxy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Orchestration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="secdeploy.html">SecDeploy — release train &amp; deployer</a></li>
 </ul>
 
 </div>
@@ -256,21 +281,21 @@
 <p>Every endpoint here is <strong>admin-gated</strong> — call it with an admin’s OIDC access token:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">BASE</span><span class="o">=</span>https://secrouter.example.url
 <span class="nv">ADMIN_TOKEN</span><span class="o">=</span>&lt;an<span class="w"> </span>admin<span class="w"> </span>OIDC<span class="w"> </span>access<span class="w"> </span>token&gt;
-<span class="nv">auth</span><span class="o">=(</span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span><span class="o">)</span>
+<span class="nv">auth</span><span class="o">=(</span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">"</span><span class="o">)</span>
 </pre></div>
 </div>
 <section id="the-fast-path-one-click-evidence-bundle">
 <h2>The fast path: one-click evidence bundle<a class="headerlink" href="#the-fast-path-one-click-evidence-bundle" title="Link to this heading">¶</a></h2>
 <p>A single endpoint packages <strong>all</strong> of the artifacts below — health, FIPS posture, the sanitized config baseline, the audit-chain verification, recent audit, 30-day usage, runtime stats, and a live control self-assessment — into one timestamped JSON file. The admin console’s <strong>Monitor → Compliance evidence</strong> card has a <strong>Download evidence bundle</strong> button for the same thing.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/admin/api/evidence&quot;</span><span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;secrouter-evidence-</span><span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="s2">.json&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">/admin/api/evidence"</span><span class="w"> </span>-o<span class="w"> </span><span class="s2">"secrouter-evidence-</span><span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="s2">.json"</span>
 </pre></div>
 </div>
 <p>The bundle’s <code class="docutils literal notranslate"><span class="pre">controls</span></code> section is a live, family-level self-assessment generated from the running configuration — a useful index for your assessor:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;controls&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;AU-3.3.8 (audit tamper-evidence)&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;verified&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;eventsChecked&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1284</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;intact&quot;</span><span class="w"> </span><span class="p">},</span>
-<span class="w">  </span><span class="nt">&quot;AC-3.1.3 / SC-3.13.6 (CUI flow / deny-by-default egress)&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;allowlistRules&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;enforced&quot;</span><span class="w"> </span><span class="p">},</span>
-<span class="w">  </span><span class="nt">&quot;IA-3.5.3 (multifactor)&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;required&quot;</span><span class="w"> </span><span class="p">},</span>
-<span class="w">  </span><span class="nt">&quot;SC-3.13.11 (FIPS crypto)&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;required&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;active&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FIPS active&quot;</span><span class="w"> </span><span class="p">}</span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="nt">"controls"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"AU-3.3.8 (audit tamper-evidence)"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"verified"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">"eventsChecked"</span><span class="p">:</span><span class="w"> </span><span class="mi">1284</span><span class="p">,</span><span class="w"> </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"intact"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"AC-3.1.3 / SC-3.13.6 (CUI flow / deny-by-default egress)"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"allowlistRules"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"enforced"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"IA-3.5.3 (multifactor)"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"required"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"required"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">"SC-3.13.11 (FIPS crypto)"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">"required"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">"active"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"FIPS active"</span><span class="w"> </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -297,42 +322,47 @@
 <td><p>AU 3.3.8</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/admin/api/audit/verify</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>Access policy</p></td>
+<tr class="row-even"><td><p>Audit retention</p></td>
+<td><p>Configurable prune window; a self-attesting <code class="docutils literal notranslate"><span class="pre">audit.pruned</span></code> anchor event keeps the chain verifiable across pruning</p></td>
+<td><p>AU 3.3.1, 3.3.8</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">security.audit.retentionDays</span></code> · evidence bundle <code class="docutils literal notranslate"><span class="pre">controls</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Access policy</p></td>
 <td><p>Who may use which tier/model — least privilege</p></td>
 <td><p>AC 3.1.1, 3.1.2, 3.1.5</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/admin/api/config</span></code> → <code class="docutils literal notranslate"><span class="pre">policy</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>Identity &amp; MFA</p></td>
+<tr class="row-even"><td><p>Identity &amp; MFA</p></td>
 <td><p>OIDC SSO with MFA enforced</p></td>
 <td><p>IA 3.5.1–3.5.3</p></td>
 <td><p>config <code class="docutils literal notranslate"><span class="pre">oidc</span></code> · audit <code class="docutils literal notranslate"><span class="pre">auth.success</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>Egress allow-list</p></td>
+<tr class="row-odd"><td><p>Egress allow-list</p></td>
 <td><p>CUI reaches only authorized destinations (deny-by-default)</p></td>
 <td><p>AC 3.1.3, SC 3.13.6</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/admin/api/config</span></code> → <code class="docutils literal notranslate"><span class="pre">egress</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>Tool governance (MCP)</p></td>
+<tr class="row-even"><td><p>Tool governance (MCP)</p></td>
 <td><p>Agentic tools reach only sanctioned destinations; tools deny-by-default per principal</p></td>
 <td><p>AC 3.1.3, 3.1.5, SC 3.13.6</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/admin/api/config</span></code> → <code class="docutils literal notranslate"><span class="pre">mcp</span></code> · audit <code class="docutils literal notranslate"><span class="pre">tool.call</span></code>/<code class="docutils literal notranslate"><span class="pre">tool.deny</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>Usage &amp; cost</p></td>
+<tr class="row-odd"><td><p>Usage &amp; cost</p></td>
 <td><p>Per-user / per-model accountability</p></td>
 <td><p>AU 3.3.2</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/admin/usage</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>Config baseline + change log</p></td>
+<tr class="row-even"><td><p>Config baseline + change log</p></td>
 <td><p>The enforced baseline and every audited change</p></td>
 <td><p>CM 3.4.1, 3.4.2</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/config</span></code> · audit <code class="docutils literal notranslate"><span class="pre">admin.action</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>FIPS / TLS posture</p></td>
+<tr class="row-odd"><td><p>FIPS / TLS posture</p></td>
 <td><p>The crypto boundary</p></td>
 <td><p>SC 3.13.8, 3.13.11</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/health</span></code> · evidence <code class="docutils literal notranslate"><span class="pre">fips</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>Evidence bundle</strong></p></td>
+<tr class="row-even"><td><p><strong>Evidence bundle</strong></p></td>
 <td><p><strong>All of the above, one JSON</strong></p></td>
 <td><p>rollup</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/admin/api/evidence</span></code></p></td>
@@ -345,16 +375,17 @@
 <h2>Audit trail — AU 3.3.x<a class="headerlink" href="#audit-trail-au-3-3-x" title="Link to this heading">¶</a></h2>
 <p>Every authentication, authorization, routing, usage, and admin event is written to a hash-chained log. Records are <strong>metadata only</strong> — token counts, model ids, decisions, hashes — and <strong>never</strong> prompt or response content (CUI-safe). Event types include <code class="docutils literal notranslate"><span class="pre">auth.success</span></code> / <code class="docutils literal notranslate"><span class="pre">auth.failure</span></code>, <code class="docutils literal notranslate"><span class="pre">authz.deny</span></code> / <code class="docutils literal notranslate"><span class="pre">authz.downgrade</span></code>, <code class="docutils literal notranslate"><span class="pre">egress.deny</span></code>, <code class="docutils literal notranslate"><span class="pre">usage</span></code>, <code class="docutils literal notranslate"><span class="pre">quota.exceeded</span></code>, <code class="docutils literal notranslate"><span class="pre">admin.action</span></code>, <code class="docutils literal notranslate"><span class="pre">provider.circuit</span></code>, <code class="docutils literal notranslate"><span class="pre">tool.call</span></code> / <code class="docutils literal notranslate"><span class="pre">tool.deny</span></code>, and <code class="docutils literal notranslate"><span class="pre">anomaly</span></code>.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Recent events, or filter by type (e.g. every authentication failure)</span>
-curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/admin/api/audit?limit=500&quot;</span>
-curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/admin/api/audit?type=auth.failure&amp;limit=200&quot;</span>
+curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">/admin/api/audit?limit=500"</span>
+curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">/admin/api/audit?type=auth.failure&amp;limit=200"</span>
 </pre></div>
 </div>
 <p><strong>Verify tamper-evidence (AU 3.3.8).</strong> Each row chains to the prior row’s SHA-256 hash; the verifier walks the whole chain and reports the first break, if any:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/admin/api/audit/verify&quot;</span>
-<span class="c1"># { &quot;ok&quot;: true, &quot;checked&quot;: 1284, &quot;ts&quot;: &quot;2026-06-26T12:00:00.000Z&quot; }</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">/admin/api/audit/verify"</span>
+<span class="c1"># { "ok": true, "checked": 1284, "ts": "2026-06-26T12:00:00.000Z" }</span>
 </pre></div>
 </div>
 <p><strong>Forward to your SIEM (AU 3.3.x, 800-172).</strong> Set <code class="docutils literal notranslate"><span class="pre">security.audit.sink:</span> <span class="pre">&quot;both&quot;</span></code> with a <code class="docutils literal notranslate"><span class="pre">syslog</span></code> target (RFC 5424, CEF or JSON) — see <a class="reference internal" href="configuration.html"><span class="std std-doc">Configuration</span></a>. The authoritative record is the SQLite store at <code class="docutils literal notranslate"><span class="pre">security.storePath</span></code>; syslog is the SOC copy.</p>
+<p><strong>Audit retention (AU 3.3.1).</strong> <code class="docutils literal notranslate"><span class="pre">security.audit.retentionDays</span></code> (default <code class="docutils literal notranslate"><span class="pre">0</span></code> = keep forever) enables a daily background job that deletes audit rows older than the retention window. Naively deleting old rows would break chain verification — the oldest surviving row’s <code class="docutils literal notranslate"><span class="pre">prevHash</span></code> would point at a hash that no longer exists — so every prune cycle first emits a self-attesting <code class="docutils literal notranslate"><span class="pre">audit.pruned</span></code> event (<code class="docutils literal notranslate"><span class="pre">deletedCount</span></code>, <code class="docutils literal notranslate"><span class="pre">throughId</span></code>, <code class="docutils literal notranslate"><span class="pre">anchorHash</span></code>) through the normal fail-closed auditor, and only deletes rows once that event is durably recorded. <code class="docutils literal notranslate"><span class="pre">verifyAuditChain</span></code> trusts <code class="docutils literal notranslate"><span class="pre">audit.pruned</span></code>’s <code class="docutils literal notranslate"><span class="pre">anchorHash</span></code> as the new chain root when present, so tamper-evidence (AU 3.3.8) holds across pruning. The evidence bundle reports the configured <code class="docutils literal notranslate"><span class="pre">retentionDays</span></code> and status (<code class="docutils literal notranslate"><span class="pre">&quot;pruned</span> <span class="pre">after</span> <span class="pre">Nd&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;retained</span> <span class="pre">indefinitely&quot;</span></code>) under <code class="docutils literal notranslate"><span class="pre">AU-3.3.1</span></code> — your enclave still owns long-term/legal-hold archival beyond what the local store retains (export via <code class="docutils literal notranslate"><span class="pre">audit.syslog</span></code> to your SIEM before the window expires).</p>
 <p><strong>Operational metrics and trace correlation.</strong> Enable <code class="docutils literal notranslate"><span class="pre">security.metrics</span></code> to expose <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/metrics</span></code> (Prometheus) — request / token / cost / error counters and latency histograms with bounded labels (no principal ids) — for Grafana dashboards and Alertmanager thresholds. And when a caller sends a W3C <code class="docutils literal notranslate"><span class="pre">traceparent</span></code>, its trace id is recorded on the audit row, so audit events join to your APM traces (AU 3.3.5). Together these feed the monitoring controls (SI 3.14.6 / 3.14.7).</p>
 <p><strong>Provider availability (SC 3.13.x).</strong> A per-provider circuit breaker trips a repeatedly-failing upstream <strong>open</strong> so requests fail fast to the next authorized model instead of hanging on a dead endpoint. Every transition is metered (<code class="docutils literal notranslate"><span class="pre">secrouter_circuit_state</span></code>, <code class="docutils literal notranslate"><span class="pre">secrouter_circuit_transitions_total</span></code>) and written to the audit trail as a <code class="docutils literal notranslate"><span class="pre">provider.circuit</span></code> event, so an availability change is itself an auditable record. Current state — per provider, with consecutive-failure counts and last-seen latency — is at <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/admin/api/health</span></code> and on the console’s <strong>Monitor → Provider health</strong> card.</p>
 <p><strong>Governed tool access — MCP (AC 3.1.3 / 3.1.5).</strong> When the tool gateway is enabled, agentic tool use is held to the same model as chat: a principal can list and call <strong>only</strong> the tools granted by <code class="docutils literal notranslate"><span class="pre">policy.allowedTools</span></code> (deny-by-default — no grant means no tools, and <code class="docutils literal notranslate"><span class="pre">tools/list</span></code> is filtered so unsanctioned tools are never even visible), each <code class="docutils literal notranslate"><span class="pre">tools/call</span></code> is classification-gated to its destination server, and every call is a <code class="docutils literal notranslate"><span class="pre">tool.call</span></code> / <code class="docutils literal notranslate"><span class="pre">tool.deny</span></code> audit event carrying a SHA-256 of the arguments — never their contents. The registered servers and per-server tool discovery are at <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/admin/api/config</span></code> → <code class="docutils literal notranslate"><span class="pre">mcp</span></code> and <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/admin/api/mcp/probe</span></code>; tool metrics are <code class="docutils literal notranslate"><span class="pre">secrouter_tool_calls_total</span></code> / <code class="docutils literal notranslate"><span class="pre">secrouter_tool_denied_total</span></code>.</p>
@@ -362,7 +393,7 @@ curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;<
 <section id="access-policy-identity-ac-3-1-x-ia-3-5-x">
 <h2>Access policy &amp; identity — AC 3.1.x / IA 3.5.x<a class="headerlink" href="#access-policy-identity-ac-3-1-x-ia-3-5-x" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/admin/api/config</span></code> returns the effective access model: the data-classification ladder, the per-group/user <strong>policy</strong> (allowed tiers/models, budgets, <code class="docutils literal notranslate"><span class="pre">maxClassification</span></code>, admin), the tier→model routing, and any live overrides (with provenance).</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/admin/api/config&quot;</span><span class="w">      </span><span class="c1"># policy, tiers, egress, classification, overrides</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">/admin/api/config"</span><span class="w">      </span><span class="c1"># policy, tiers, egress, classification, overrides</span>
 </pre></div>
 </div>
 <p>Identity and MFA are evidenced by the <code class="docutils literal notranslate"><span class="pre">oidc</span></code> block (issuer, audience, JWKS, <code class="docutils literal notranslate"><span class="pre">requireMfa</span></code>) plus the audit trail, where each <code class="docutils literal notranslate"><span class="pre">auth.success</span></code> records <code class="docutils literal notranslate"><span class="pre">detail.mfa</span></code> for the principal.</p>
@@ -370,33 +401,33 @@ curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;<
 <section id="egress-data-flow-control-ac-3-1-3-sc-3-13-6">
 <h2>Egress / data-flow control — AC 3.1.3 / SC 3.13.6<a class="headerlink" href="#egress-data-flow-control-ac-3-1-3-sc-3-13-6" title="Link to this heading">¶</a></h2>
 <p>The deny-by-default egress allow-list is the CUI flow control: each rule names a <code class="docutils literal notranslate"><span class="pre">provider</span></code>, the exact <code class="docutils literal notranslate"><span class="pre">allowedHost</span></code>, and the <code class="docutils literal notranslate"><span class="pre">authorizedClassifications</span></code> it may receive. Anything not listed is refused, and refusals are logged as <code class="docutils literal notranslate"><span class="pre">egress.deny</span></code>.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/admin/api/config&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;import json,sys;print(json.dumps(json.load(sys.stdin)[&quot;egress&quot;],indent=2))&#39;</span>
-curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/admin/api/audit?type=egress.deny&quot;</span><span class="w">   </span><span class="c1"># attempts that were blocked</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">/admin/api/config"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s1">'import json,sys;print(json.dumps(json.load(sys.stdin)["egress"],indent=2))'</span>
+curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">/admin/api/audit?type=egress.deny"</span><span class="w">   </span><span class="c1"># attempts that were blocked</span>
 </pre></div>
 </div>
 </section>
 <section id="usage-accountability-au-3-3-2">
 <h2>Usage &amp; accountability — AU 3.3.2<a class="headerlink" href="#usage-accountability-au-3-3-2" title="Link to this heading">¶</a></h2>
 <p>Per-user, per-model, per-day token and cost accounting demonstrates individual accountability and supports cost containment.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/admin/usage?groupBy=principal&amp;days=90&quot;</span><span class="w">   </span><span class="c1"># who used what</span>
-curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/admin/usage?groupBy=model&amp;days=30&quot;</span>
-curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/admin/usage?groupBy=day&amp;principal=alice@example.url&quot;</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">/admin/usage?groupBy=principal&amp;days=90"</span><span class="w">   </span><span class="c1"># who used what</span>
+curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">/admin/usage?groupBy=model&amp;days=30"</span>
+curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">/admin/usage?groupBy=day&amp;principal=alice@example.url"</span>
 </pre></div>
 </div>
 </section>
 <section id="configuration-baseline-change-control-cm-3-4-x">
 <h2>Configuration baseline &amp; change control — CM 3.4.x<a class="headerlink" href="#configuration-baseline-change-control-cm-3-4-x" title="Link to this heading">¶</a></h2>
 <p>The config <strong>file</strong> is the change-controlled baseline; the server validates it at startup and <strong>fails closed</strong> on anything unsafe. Every change made through the console is written back to that file (atomically, with a <code class="docutils literal notranslate"><span class="pre">.bak</span></code> backup) and recorded in the audit log as an <code class="docutils literal notranslate"><span class="pre">admin.action</span></code>.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/config&quot;</span><span class="w">                                  </span><span class="c1"># the sanitized baseline (secrets redacted)</span>
-curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/admin/api/audit?type=admin.action&quot;</span><span class="w">       </span><span class="c1"># config writes, reloads, restarts, policy edits</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">/config"</span><span class="w">                                  </span><span class="c1"># the sanitized baseline (secrets redacted)</span>
+curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">auth</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">/admin/api/audit?type=admin.action"</span><span class="w">       </span><span class="c1"># config writes, reloads, restarts, policy edits</span>
 </pre></div>
 </div>
 </section>
 <section id="crypto-fips-posture-sc-3-13-8-3-13-11">
 <h2>Crypto / FIPS posture — SC 3.13.8 / 3.13.11<a class="headerlink" href="#crypto-fips-posture-sc-3-13-8-3-13-11" title="Link to this heading">¶</a></h2>
 <p>When <code class="docutils literal notranslate"><span class="pre">requireFips</span></code> is set, the server asserts FIPS-mode crypto at startup and <strong>refuses to start</strong> otherwise. The TLS policy (front-end termination or native) follows SP 800-52r2.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE</span><span class="s2">/health&quot;</span><span class="w">        </span><span class="c1"># { &quot;status&quot;:&quot;ok&quot;, &quot;security&quot;:&quot;enabled&quot;, ... }  (unauthenticated liveness)</span>
-<span class="c1"># FIPS required vs. active and the TLS config are captured in the evidence bundle&#39;s &quot;fips&quot; and &quot;config.security.tls&quot;.</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">"</span><span class="nv">$BASE</span><span class="s2">/health"</span><span class="w">        </span><span class="c1"># { "status":"ok", "security":"enabled", ... }  (unauthenticated liveness)</span>
+<span class="c1"># FIPS required vs. active and the TLS config are captured in the evidence bundle's "fips" and "config.security.tls".</span>
 </pre></div>
 </div>
 </section>
@@ -405,17 +436,17 @@ curl<span class="w"> </span>-fsS<span class="w"> </span><span class="s2">&quot;<
 <p>The one-shot bundle is usually enough, but you can also archive the individual artifacts:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">BASE</span><span class="o">=</span>https://secrouter.example.url
 <span class="nv">ADMIN_TOKEN</span><span class="o">=</span>&lt;admin<span class="w"> </span>token&gt;
-<span class="nv">out</span><span class="o">=</span><span class="s2">&quot;secrouter-evidence-</span><span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$out</span><span class="s2">&quot;</span>
-get<span class="o">(){</span><span class="w"> </span>curl<span class="w"> </span>-fsS<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BASE$1</span><span class="s2">&quot;</span><span class="w"> </span>-o<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$out</span><span class="s2">/</span><span class="nv">$2</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="o">}</span>
+<span class="nv">out</span><span class="o">=</span><span class="s2">"secrouter-evidence-</span><span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">"</span>
+get<span class="o">(){</span><span class="w"> </span>curl<span class="w"> </span>-fsS<span class="w"> </span>-H<span class="w"> </span><span class="s2">"Authorization: Bearer </span><span class="nv">$ADMIN_TOKEN</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BASE$1</span><span class="s2">"</span><span class="w"> </span>-o<span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">/</span><span class="nv">$2</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="o">}</span>
 
-get<span class="w"> </span><span class="s2">&quot;/admin/api/evidence&quot;</span><span class="w">                         </span>bundle.json
-get<span class="w"> </span><span class="s2">&quot;/admin/api/audit/verify&quot;</span><span class="w">                     </span>audit-verify.json
-get<span class="w"> </span><span class="s2">&quot;/admin/api/audit?limit=1000&quot;</span><span class="w">                 </span>audit-recent.json
-get<span class="w"> </span><span class="s2">&quot;/admin/api/config&quot;</span><span class="w">                           </span>access-config.json
-get<span class="w"> </span><span class="s2">&quot;/admin/usage?groupBy=principal&amp;days=90&quot;</span><span class="w">      </span>usage-90d.json
-get<span class="w"> </span><span class="s2">&quot;/config&quot;</span><span class="w">                                     </span>config-baseline.json
-get<span class="w"> </span><span class="s2">&quot;/stats&quot;</span><span class="w">                                      </span>runtime-stats.json
-tar<span class="w"> </span>czf<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$out</span><span class="s2">.tgz&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$out</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;wrote </span><span class="nv">$out</span><span class="s2">.tgz&quot;</span>
+get<span class="w"> </span><span class="s2">"/admin/api/evidence"</span><span class="w">                         </span>bundle.json
+get<span class="w"> </span><span class="s2">"/admin/api/audit/verify"</span><span class="w">                     </span>audit-verify.json
+get<span class="w"> </span><span class="s2">"/admin/api/audit?limit=1000"</span><span class="w">                 </span>audit-recent.json
+get<span class="w"> </span><span class="s2">"/admin/api/config"</span><span class="w">                           </span>access-config.json
+get<span class="w"> </span><span class="s2">"/admin/usage?groupBy=principal&amp;days=90"</span><span class="w">      </span>usage-90d.json
+get<span class="w"> </span><span class="s2">"/config"</span><span class="w">                                     </span>config-baseline.json
+get<span class="w"> </span><span class="s2">"/stats"</span><span class="w">                                      </span>runtime-stats.json
+tar<span class="w"> </span>czf<span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">.tgz"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">"</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"wrote </span><span class="nv">$out</span><span class="s2">.tgz"</span>
 </pre></div>
 </div>
 </section>
@@ -478,7 +509,15 @@ tar<span class="w"> </span>czf<span class="w"> </span><span class="s2">&quot;</s
       <footer>
         
         <div class="related-pages">
-          
+          <a class="next-page" href="secllm.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">SecLLM — a control plane for vLLM</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
           <a class="prev-page" href="configuration.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">

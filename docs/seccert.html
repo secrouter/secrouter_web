@@ -1,15 +1,15 @@
 <!doctype html>
 <html class="no-js" lang="en" data-content_root="./">
-  <head>
-<meta charset="utf-8">
+  <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="#">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="SecSSO — single sign-on for the suite" href="secsso.html"><link rel="prev" title="The SecRouter suite — documentation" href="index.html">
         <link rel="prefetch" href="_static/logo-mark.svg" as="image">
         <link rel="prefetch" href="_static/logo-mark-dark.svg" as="image">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
-<meta name="robots" content="noindex" />
-<title>Search - SecRouter Docs</title><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+        <title>SecCert — internal ACME certificate authority - SecRouter Docs</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=bc976ec1" />
@@ -181,7 +181,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -201,15 +201,15 @@
     <span class="sidebar-brand-text">SecRouter Docs</span>
   </a>
   
-</div><form class="sidebar-search-container" method="get" action="#" role="search">
+</div><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Identity &amp; trust</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="seccert.html">SecCert — internal ACME certificate authority</a></li>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">SecCert — internal ACME certificate authority</a></li>
 <li class="toctree-l1"><a class="reference internal" href="secsso.html">SecSSO — single sign-on for the suite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="secdns.html">secdns — internal authoritative DNS</a></li>
 </ul>
@@ -256,7 +256,9 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -264,30 +266,81 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          
-<noscript>
-<div class="admonition error">
-  <p class="admonition-title">Error</p>
-  <p>
-    Please activate JavaScript to enable the search functionality.
-  </p>
+          <section id="seccert-internal-acme-certificate-authority">
+<h1>SecCert — internal ACME certificate authority<a class="headerlink" href="#seccert-internal-acme-certificate-authority" title="Link to this heading">¶</a></h1>
+<p><strong>SecCert</strong> is a self-hosted <a class="reference external" href="https://datatracker.ietf.org/doc/html/rfc8555">ACME</a> (RFC 8555)
+certificate authority for closed and air-gapped networks. Point any standard ACME client
+(certbot, acme.sh, Caddy, Traefik, lego, <code class="docutils literal notranslate"><span class="pre">step</span></code>) at it and your internal services get
+short-lived, auto-renewing certs from a CA you run and trust — a tiny Let’s Encrypt for your
+<code class="docutils literal notranslate"><span class="pre">.mil</span></code>/<code class="docutils literal notranslate"><span class="pre">.internal</span></code> network, with no path to the public internet required.</p>
+<p>It’s deployed first on every suite target, as the internal CA every other component trusts.</p>
+<section id="what-it-does">
+<h2>What it does<a class="headerlink" href="#what-it-does" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Standards-based</strong> — real RFC 8555. Existing ACME clients work unmodified.</p></li>
+<li><p><strong>Two-tier PKI</strong> — a self-signed Root signs an Intermediate; only the Intermediate signs
+leaves. Publish the Root once as your enclave’s trust anchor.</p></li>
+<li><p><strong>Fully offline</strong> — key generation, issuance, and validation all happen in-network. No
+telemetry, no external calls.</p></li>
+<li><p><strong>Small and auditable</strong> — Python + FastAPI + <code class="docutils literal notranslate"><span class="pre">cryptography</span></code>, one container, SQLite state,
+and a hash-chained, tamper-evident issuance ledger.</p></li>
+<li><p><strong>Admin console</strong> at <code class="docutils literal notranslate"><span class="pre">/admin</span></code> — list and inspect issued certificates, revoke, download the
+Root, and see CA info. Gated by a bearer token, or optionally SecSSO login.</p></li>
+</ul>
+</section>
+<section id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>seccert<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-p<span class="w"> </span><span class="m">14000</span>:14000<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>seccert-data:/var/lib/seccert<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">SECCERT_EXTERNAL_URL</span><span class="o">=</span>http://ca.internal.example:14000<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>ghcr.io/secrouter/seccert:latest
+</pre></div>
 </div>
-</noscript>
-
-<div id="search-results"></div>
+<p>On first boot SecCert generates the Root + Intermediate and prints the admin token — grab the
+trust anchor at <code class="docutils literal notranslate"><span class="pre">/ca.crt</span></code> and point an ACME client’s directory at <code class="docutils literal notranslate"><span class="pre">/acme/directory</span></code>.</p>
+</section>
+<section id="learn-more">
+<h2>Learn more<a class="headerlink" href="#learn-more" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong><a class="reference external" href="https://github.com/secrouter/seccert">SecCert on GitHub</a></strong> — source, issues, releases.</p></li>
+<li><p><strong><a class="reference external" href="https://github.com/secrouter/seccert/tree/main/docs">SecCert docs</a></strong> — deployment, ACME
+client integration, trust-anchor distribution, security posture, and the full environment
+variable / endpoint reference.</p></li>
+</ul>
+</section>
+</section>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="secsso.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">SecSSO — single sign-on for the suite</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Home</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -308,8 +361,29 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">SecCert — internal ACME certificate authority</a><ul>
+<li><a class="reference internal" href="#what-it-does">What it does</a></li>
+<li><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li><a class="reference internal" href="#learn-more">Learn more</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -318,8 +392,5 @@
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
-    
-<script src="_static/searchtools.js"></script>
-<script src="_static/language_data.js"></script>
-<script src="searchindex.js"></script></body>
+    </body>
 </html>

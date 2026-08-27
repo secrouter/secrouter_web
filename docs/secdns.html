@@ -1,15 +1,15 @@
 <!doctype html>
 <html class="no-js" lang="en" data-content_root="./">
-  <head>
-<meta charset="utf-8">
+  <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="#">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="SecRouter (gateway)" href="deploy.html"><link rel="prev" title="SecSSO — single sign-on for the suite" href="secsso.html">
         <link rel="prefetch" href="_static/logo-mark.svg" as="image">
         <link rel="prefetch" href="_static/logo-mark-dark.svg" as="image">
 
     <!-- Generated with Sphinx 7.4.7 and Furo 2025.12.19 -->
-<meta name="robots" content="noindex" />
-<title>Search - SecRouter Docs</title><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+        <title>secdns — internal authoritative DNS - SecRouter Docs</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=bc976ec1" />
@@ -181,7 +181,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -201,17 +201,17 @@
     <span class="sidebar-brand-text">SecRouter Docs</span>
   </a>
   
-</div><form class="sidebar-search-container" method="get" action="#" role="search">
+</div><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Identity &amp; trust</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="seccert.html">SecCert — internal ACME certificate authority</a></li>
 <li class="toctree-l1"><a class="reference internal" href="secsso.html">SecSSO — single sign-on for the suite</a></li>
-<li class="toctree-l1"><a class="reference internal" href="secdns.html">secdns — internal authoritative DNS</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">secdns — internal authoritative DNS</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">SecRouter (gateway)</span></p>
 <ul>
@@ -256,7 +256,9 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -264,30 +266,79 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          
-<noscript>
-<div class="admonition error">
-  <p class="admonition-title">Error</p>
-  <p>
-    Please activate JavaScript to enable the search functionality.
-  </p>
-</div>
-</noscript>
+          <section id="secdns-internal-authoritative-dns">
+<h1>secdns — internal authoritative DNS<a class="headerlink" href="#secdns-internal-authoritative-dns" title="Link to this heading">¶</a></h1>
+<p><strong>secdns</strong> is a small, zero-dependency (standard library only) authoritative DNS server that
+serves an internal zone so the suite’s components resolve each other by name across hosts —
+so a multi-host deployment gets real name resolution instead of scattered <code class="docutils literal notranslate"><span class="pre">/etc/hosts</span></code> edits.</p>
+<section id="what-it-does">
+<h2>What it does<a class="headerlink" href="#what-it-does" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Authoritative</strong> for one internal zone (default <code class="docutils literal notranslate"><span class="pre">sec.internal</span></code>), answering <code class="docutils literal notranslate"><span class="pre">A</span></code> / <code class="docutils literal notranslate"><span class="pre">AAAA</span></code> /
+<code class="docutils literal notranslate"><span class="pre">TXT</span></code> from a simple zone file, with correct <code class="docutils literal notranslate"><span class="pre">NXDOMAIN</span></code> / <code class="docutils literal notranslate"><span class="pre">NODATA</span></code> resolver behavior.</p></li>
+<li><p><strong>Forwards</strong> non-internal queries to upstream resolvers, or <strong>refuses</strong> them when no upstream
+is configured — the closed-network default, so nothing leaks out.</p></li>
+<li><p><strong>UDP + TCP</strong> on port 53, with <strong>live reload</strong> (<code class="docutils literal notranslate"><span class="pre">kill</span> <span class="pre">-HUP</span></code> or the console’s <em>Reload</em> button)
+and no downtime.</p></li>
+<li><p><strong>Status console</strong> — a tiny HTTP page with the served records, live query stats, and
+<code class="docutils literal notranslate"><span class="pre">/health</span></code> for probes.</p></li>
+<li><p>In the suite, <strong>SecDeploy generates the zone file</strong> from your <code class="docutils literal notranslate"><span class="pre">topology.toml</span></code> — one record
+per component, pointing at wherever it’s actually hosted.</p></li>
+<li><p><strong>Tamper-evident audit</strong> — lifecycle events (start/stop, zone load/reload — never per-query)
+are recorded to a hash-chained JSONL log.</p></li>
+</ul>
+</section>
+<section id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync
+cp<span class="w"> </span>zones/secdns.zone.example<span class="w"> </span>zones/secdns.zone
+uv<span class="w"> </span>run<span class="w"> </span>secdns<span class="w"> </span>serve<span class="w"> </span>--domain<span class="w"> </span>sec.internal<span class="w"> </span>--zone<span class="w"> </span>zones/secdns.zone<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--upstream<span class="w"> </span><span class="m">1</span>.1.1.1<span class="w"> </span>--port<span class="w"> </span><span class="m">5353</span>
 
-<div id="search-results"></div>
+dig<span class="w"> </span>@127.0.0.1<span class="w"> </span>-p<span class="w"> </span><span class="m">5353</span><span class="w"> </span>secrouter.sec.internal
+</pre></div>
+</div>
+</section>
+<section id="learn-more">
+<h2>Learn more<a class="headerlink" href="#learn-more" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong><a class="reference external" href="https://github.com/secrouter/secdns">secdns on GitHub</a></strong> — source, issues, releases.</p></li>
+<li><p><strong><a class="reference external" href="https://github.com/secrouter/secdns/tree/main/docs">secdns docs</a></strong> — the config reference,
+zone file format, console, deployment, and control validation.</p></li>
+</ul>
+</section>
+</section>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="deploy.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">SecRouter (gateway)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="secsso.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">SecSSO — single sign-on for the suite</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -308,8 +359,29 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">secdns — internal authoritative DNS</a><ul>
+<li><a class="reference internal" href="#what-it-does">What it does</a></li>
+<li><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li><a class="reference internal" href="#learn-more">Learn more</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -318,8 +390,5 @@
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
-    
-<script src="_static/searchtools.js"></script>
-<script src="_static/language_data.js"></script>
-<script src="searchindex.js"></script></body>
+    </body>
 </html>
